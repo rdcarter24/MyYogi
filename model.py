@@ -9,11 +9,11 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 ENGINE = None
 Session = None
 ENGINE = create_engine("sqlite:///yoga.db", echo=False)
-session = scoped_session(sessionmaker(bind=ENGINE, autocommit = False, autoflush = False))
+session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 
 Base = declarative_base()
 
-# comment 16 through 17 out when using connect function below
+#comment 16 through 17 out when using connect function below
 Base.query = session.query_property()
 Base.metadata.create_all(ENGINE)
 
@@ -24,16 +24,27 @@ class Asana(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(64), nullable=False)
-    position = Column(Integer, nullable=False)
-    movement = Column(String(64), nullable=True)
-    time = Column(Integer, nullable=False)
+    image = Column(String(64), nullable=True)
+    side = Column(String(1), nullable=True)
+    routine = Column(String(64), nullable=True)
+    breaths = Column(Integer, nullable=True)
+    variance = Column(Integer, nullable=True)
+
+
+class Flow(Base):
+    __tablename__ = "flows"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(64), nullable= False)
+    sequence = Column(String(64), nullable=True) 
+    cycles = Column(Integer, nullable=True)
 
 #use connect function when initializing database
-# def connect():
-#     global ENGINE
-#     global Session
+def connect():
+    global ENGINE
+    global Session
 
-#     ENGINE = create_engine("sqlite:///yoga.db", echo=True)
-#     Session = sessionmaker(bind=ENGINE)
+    ENGINE = create_engine("sqlite:///yoga.db", echo=True)
+    Session = sessionmaker(bind=ENGINE)
 
-#     return Session()
+    return Session()
