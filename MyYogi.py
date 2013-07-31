@@ -1,8 +1,8 @@
 
-import warm_up_training_data
+import training_data
 import random
 #import sciplot
-
+import numpy as np
 import model
 
 
@@ -11,7 +11,7 @@ breath = 4
 time = 2*60
 
 
-
+########### Functions ############
 
 def get_random_asana():
     rand = random.randrange(0, model.session.query(model.Asana).count())
@@ -27,6 +27,20 @@ def add_asana(name, routine):  # make number of arguments flexible (*kwargs)
     model.session.add(asana)
     model.session.commit()
     return asana
+
+def rando_choice(data_list):
+    num = random.randint(0, len(data_list) - 1)
+    choice = data_list[num]
+    return choice
+
+def choose_ngram(decimal):
+    rand = round(random.random(),1)
+    if rand <= decimal:
+        return True
+    else:
+        return False
+
+
 
 
 '''
@@ -45,56 +59,153 @@ while time > 0:
         prev_move = next_move
 
 
-
-def rando_choice(data_list):
-    num = random.randint(0, len(data_list) - 1)
-    choice = data_list[num]
-    return choice
-
-########### Bigram Markov ###############
-
-bigram_dict = {}
-bigram_chain = []
-
-for i in range(len(warm_up_training_data.good)):
-    series = warm_up_training_data.good[i]
-    
-
-    for i in range(len(series)-2):
-        move1 = series[i]
-        move2 = series[i+1]
-        move3 = series[i+2]
-
-        key = (move1,move2)
-
-        bigram_dict.setdefault(key,[move3]).append(move3)
-
-
-
-start_key = (0,1)
-options_list = bigram_dict[start_key]
-
-chosen_option = rando_choice(options_list)
-bigram_chain.extend([start_key[0],start_key[1],chosen_option])
-
-new_key = (start_key[1],chosen_option)
-
-
-
-count = 0
-
-while count < 15:
-    if new_key in bigram_dict:
-        option_list = bigram_dict[new_key]
-
-        chosen_option = rando_choice(option_list)
-        bigram_chain.append(chosen_option)
-
-        new_key = (new_key[1],chosen_option)
-
-        count += 1
-    else:
-        break
-print bigram_chain
 '''
 
+
+########### Trigram Markov ###############
+
+
+class Trigram(object):
+    def __init__(self):
+        self.name = None
+
+
+# takes in a training data set and returns a markov dictionary
+    def read_training_data(self, training_data):
+        trigram_dict = {}
+     
+
+        for i in range(len(training_data)-2):
+            move1 = training_data[i]
+            move2 = training_data[i+1]
+            move3 = training_data[i+2]
+
+            key = (move1,move2)
+
+            trigram_dict.setdefault(key,[]).append(move3)
+        
+        return trigram_dict
+
+
+# takes in a markov dictionary and returns a predicted yoga routine
+    def make_prediction(self, d):
+        trigram_chain = []
+
+        start_key = (0,2)
+        options_list = d[start_key]
+        chosen_option = rando_choice(options_list)
+
+        trigram_chain.extend([start_key[0],start_key[1],chosen_option])
+
+        new_key = (start_key[1],chosen_option)
+
+
+
+        for i in range(len(training_data.good_warm_up)-3):
+            if new_key in d:
+                option_list = d[new_key]
+
+                chosen_option = rando_choice(option_list)
+                trigram_chain.append(chosen_option)
+
+                new_key = (new_key[1],chosen_option)
+
+            else:
+                break
+        return trigram_chain
+
+
+
+
+
+################### Quadgram Markov ###############
+
+class Quadgram(object):
+    def __init__(self):
+        self.name = None
+
+
+# takes in a training data set and returns a markov dictionary
+    def read_training_data(self, training_data):
+        quadgram_dict = {}
+     
+
+        for i in range(len(training_data)-3):
+            move1 = training_data[i]
+            move2 = training_data[i+1]
+            move3 = training_data[i+2]
+            move4 = training_data[i+3]
+
+            key = (move1, move2, move3)
+
+            quadgram_dict.setdefault(key,[]).append(move4)
+
+        return quadgram_dict
+
+
+# takes in a markov dictionary and returns a predicted yoga routine
+    def make_prediction(self, d):
+        quadgram_chain = []
+
+        start_key = (0,2,1)
+        options_list = d[start_key]
+
+        chosen_option = rando_choice(options_list)
+        quadgram_chain.extend([start_key[0],start_key[1],start_key[2],chosen_option])
+
+        new_key = (start_key[1],start_key[2],chosen_option)
+
+
+        for i in range(len(training_data.good_warm_up)-4):
+            if new_key in d:
+                option_list = d[new_key]
+
+                chosen_option = rando_choice(option_list)
+                quadgram_chain.append(chosen_option)
+
+                new_key = (new_key[1],new_key[2], chosen_option)
+
+            else:
+                break
+        return quadgram_chain
+
+
+ # create objects
+trigram = Trigram()
+quadgram = Quadgram()
+
+tri_predict = trigram.make_prediction(trigram.read_training_data(training_data.good_warm_up))
+
+quad_predict = quadgram.make_prediction(quadgram.read_training_data(training_data.good_warm_up))
+
+
+
+#compares both methods to training data to determine error
+def compare_methods(training_data):
+    error_dict = {}
+    error_list = []
+    
+    ## write test for this
+    for i in np.arange(0, 1, 0.1): 
+        error = 0
+        for j in range(len(training_data)):
+
+            # tri: w1 = .1, quad: w2 = .9
+            # if choose_ngram <= w1 go with tri
+            if choose_ngram(i):
+                if tri_predict[j] != training_data[j]:
+                    error += 1
+            else:
+                if quad_predict[j] != training_data[j]:
+                    error += 1
+        error_dict[(round(i, 1), round(1-i, 1))] = error
+        error_list.append((round(i, 1), round(1-i, 1)))
+    
+
+ 
+    # find weights with the lowest error
+    return min(error_dict.items(), key=lambda x: x[1])[0]
+
+print compare_methods(training_data.good_warm_up)
+
+    
