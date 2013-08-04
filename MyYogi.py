@@ -23,12 +23,27 @@ def get_asana(**kwargs):
         asana = model.session.query(model.Asana).filter(getattr(model.Asana,key) == kwargs[key]).first()
     return asana   
 
-
 def add_asana(name, routine):  # make number of arguments flexible (*kwargs)
     asana = model.Asana(name=name, routine=routine)
     model.session.add(asana)
     model.session.commit()
     return asana
+
+
+
+
+
+def add_user(email, password, first_name): 
+    user = model.User(email=email, password=password, first_name=first_name)
+    model.session.add(user)
+    model.session.commit()
+    return user
+
+
+
+
+
+
 
 def rando_choice(data_list):
     num = random.randint(0, len(data_list) - 1)
@@ -41,8 +56,6 @@ def choose_ngram(w1, w2):
         return "tri"
     elif rand <= w2:
         return "quad"
-
-
 
 def generate_routine(training_data):
     trigram_dict = {}

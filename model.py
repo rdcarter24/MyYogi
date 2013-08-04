@@ -39,6 +39,14 @@ class Flow(Base):
     sequence = Column(String(64), nullable=True) 
     cycles = Column(Integer, nullable=True)
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(64), nullable= False)
+    email = Column(String(64), nullable=False) 
+    password = Column(Integer, nullable=False) 
+
 #use connect function when initializing database
 # def connect():
 #     global ENGINE
