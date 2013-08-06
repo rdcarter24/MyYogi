@@ -10,8 +10,7 @@ import model
 breath = 4 
 time = 2*60
 
-
-########### Functions ############
+########### Query Functions ############
 
 def get_random_asana():
     rand = random.randrange(0, model.session.query(model.Asana).count())
@@ -30,7 +29,10 @@ def add_asana(name, routine):  # make number of arguments flexible (*kwargs)
     return asana
 
 
-
+def get_user(**kwargs):
+    for key in kwargs:
+        user = model.session.query(model.User).filter(getattr(model.User,key) == kwargs[key]).first()
+    return user   
 
 
 def add_user(email, password, first_name): 
@@ -41,7 +43,7 @@ def add_user(email, password, first_name):
 
 
 
-
+############# Functions ############
 
 
 
@@ -57,9 +59,11 @@ def choose_ngram(w1, w2):
     elif rand <= w2:
         return "quad"
 
+
 def generate_routine(training_data):
     trigram_dict = {}
     trigram_chain = [] 
+
 
     for i in range(len(training_data)-2):
         move1 = training_data[i]
@@ -95,11 +99,38 @@ def generate_routine(training_data):
     return trigram_chain
 
 
-
-
-
-
+########### Build Up Routine #########
 '''
+def awesome_yoga_routine():
+    #generate a warm up routine
+    warm_up = generate_routine(training_data.good_warm_up, 10)
+
+    sun_salutation = query #flow database for sun salutaion
+    #warrior series needs to repeat on both sides
+
+    one_side = generate_routine(training_data.good_warrior, 7)
+
+    vinyasa = query #flow database for vinyasa or other flow sequence 
+
+    other_side = one_side # work out how to do mirror
+
+    balance = generate_routine(training_data.good_balance, 10)
+
+    floor_stretch = generate_routine(training_data.good_floor_balance, 10)
+
+    savasana =  query # asana database for savasana
+
+    return warm_up + sun_salutation + one_side + vinyasa + other_side + balance
+    + floor_stretch + savasana
+
+
+
+
+
+
+
+
+
 # always starts with the same first move
 first_move = model.session.query(model.Asana).get(1)
 

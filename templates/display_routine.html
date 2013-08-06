@@ -1,13 +1,27 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+  
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 
 </head>
-<body> <center>
-    {% for item in name_list %}
-    {{item}}<br>
-    {% endfor %}
+<body>
+  
+<input type="button" value="Save" onclick="save();"/>
+
+{% for item in name_list %}
+<div id = "save_feedback"></div>
+<script>
+function save(){
 
 
-    </center>
+    $('#save_feedback').html("{{item}}");
+    $('#save_feedback').fadeIn(500);
+    $('#save_feedback').delay(2000);
+    $('#save_feedback').fadeOut(500);
+
+}
+</script>
+ {% endfor %}
 </body>
 </html>

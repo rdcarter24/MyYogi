@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for
 import MyYogi
 import training_data
+import model
+import os
 
 app = Flask(__name__)
 
@@ -9,9 +11,31 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
+
+############ finish user log in#################
+@app.route("/login")
+def login():
+    email = request.args.get("email")
+    password = request.args.get("password")
+    try:
+        user = model.session.query(model.User).filter_by(email=email).filter_by(password=password).one()
+        if user:
+    
+            session["user_id"]=user.id
+            return redirect(url_for("user_home"))
+         
+    except model.NoResultFound, e:
+        print e
+        message = "This is embarassing... It appears we don't have that login on file."
+        return render_template("home.html", message=message)
+
+
+
 @app.route("/user_home")
 def user_home():
-    return render_template("user_home.html")
+    user = MyYogi.get_user(id=session["user_id"])
+    message = "Welcome back %s" % user.first_name
+    return render_template("user_home.html", message=message)
 
 @app.route("/add_user")
 def add_user():
@@ -45,7 +69,7 @@ def display_routine():
     for i in routine:
         asana = MyYogi.get_asana(id=i)
         asana_name.append(asana.name)
-    return render_template("display_routine.html", name_list=asana_name) 
+        return render_template("display_routine.html", name_list=asana_name) 
 
 @app.route("/add_asana")
 def add_asana():
@@ -59,6 +83,9 @@ def new_asana():
     return redirect(url_for("display_asana", name=asana.name))
 
 
+#### don't add to git w key unrandom
+# app.secret_key = os.urandom(24)
+app.secret_key = "jhdjfhakhdfsafd"
 
 if __name__=="__main__":
     app.run(debug=True)
