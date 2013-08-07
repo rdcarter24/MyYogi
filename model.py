@@ -3,6 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship, backref
 
 
 # Use connection function below when initializing database.
@@ -47,6 +49,28 @@ class User(Base):
     first_name = Column(String(64), nullable= False)
     email = Column(String(64), nullable=False) 
     password = Column(Integer, nullable=False) 
+
+class Routine(Base):
+    __tablename__ = "routines"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(64), nullable= True)
+    user_id = Column(Integer, ForeignKey('users.id')) 
+    length = Column(Integer, nullable=True)  
+
+    user = relationship("User", backref=backref("routines", order_by=id))
+
+
+class Routine_Move(Base):
+    __tablename__ = "routine_moves"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(64), nullable=False)
+    routine_id = Column(Integer, ForeignKey('routines.id')) 
+    order = Column(Integer, nullable=False)
+    length = Column(Integer, nullable=True)
+
+    routine = relationship("Routine",backref=backref("routine_moves", order_by=id))
 
 #use connect function when initializing database
 # def connect():

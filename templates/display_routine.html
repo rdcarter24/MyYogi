@@ -1,3 +1,6 @@
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,21 +10,73 @@
 </head>
 <body>
   
-<input type="button" value="Save" onclick="save();"/>
 
-{% for item in name_list %}
+<!-- loop thru name_list in jquery and display each item using save function -->
 <div id = "save_feedback"></div>
+
+
 <script>
-function save(){
 
+var name_list = {{ name_list | safe}};
+t = 0;
+x = 0;
+for (var i = 0; i < name_list.length; i++) {
 
-    $('#save_feedback').html("{{item}}");
-    $('#save_feedback').fadeIn(500);
-    $('#save_feedback').delay(2000);
+    console.log(t)
+    setTimeout(function (){
+    console.log(i)
+    console.log(name_list[x])
     $('#save_feedback').fadeOut(500);
+    $('#save_feedback').fadeIn(500);
+    $('#save_feedback').html(name_list[x]);
+    
+    x++
+},t);
 
+
+t=t+5000
 }
+
+
 </script>
- {% endfor %}
+
+        <form action="/add_routine">
+        
+        <input type="submit" value="Save"/>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <html>
+<head>
+
+</head>
+
+<body>
+
+{% for item in name_list %}
+    {{ item }}<br>
+{% endfor %}
+
+
+
+</body>
+
+</html>
+ -->
+
+
+
+

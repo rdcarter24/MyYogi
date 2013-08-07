@@ -11,7 +11,7 @@ breath = 4
 time = 2*60
 
 ########### Query Functions ############
-
+###### Asanas
 def get_random_asana():
     rand = random.randrange(0, model.session.query(model.Asana).count())
     rand_asana = model.session.query(model.Asana)[rand]
@@ -28,7 +28,7 @@ def add_asana(name, routine):  # make number of arguments flexible (*kwargs)
     model.session.commit()
     return asana
 
-
+######## Users
 def get_user(**kwargs):
     for key in kwargs:
         user = model.session.query(model.User).filter(getattr(model.User,key) == kwargs[key]).first()
@@ -41,9 +41,16 @@ def add_user(email, password, first_name):
     model.session.commit()
     return user
 
+########## Routine
+
+def save_routine(name, user_id):  # make number of arguments flexible (*kwargs)
+    routine = model.Routine(name=name, user_id=user_id)
+    model.session.add(routine)
+    model.session.commit()
+    return routine
 
 
-############# Functions ############
+############# Helper Functions ############
 
 
 

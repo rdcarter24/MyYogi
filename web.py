@@ -3,8 +3,10 @@ import MyYogi
 import training_data
 import model
 import os
+import json
 
 app = Flask(__name__)
+
 
 ############ user log in/sign up ###########
 @app.route("/")
@@ -20,26 +22,25 @@ def login():
     try:
         user = model.session.query(model.User).filter_by(email=email).filter_by(password=password).one()
         if user:
-    
             session["user_id"]=user.id
             return redirect(url_for("user_home"))
-         
     except model.NoResultFound, e:
         print e
         message = "This is embarassing... It appears we don't have that login on file."
         return render_template("home.html", message=message)
 
 
-
 @app.route("/user_home")
 def user_home():
     user = MyYogi.get_user(id=session["user_id"])
-    message = "Welcome back %s" % user.first_name
+    message = "Welcome %s" % user.first_name
     return render_template("user_home.html", message=message)
+
 
 @app.route("/add_user")
 def add_user():
     return render_template("add_user.html")
+
 
 @app.route("/new_user")
 def new_user():
@@ -50,17 +51,16 @@ def new_user():
     return redirect(url_for("user_home"))
 
 
-
-
 ######### Yoga Info ##########
 @app.route("/display_asana")
 def display_asana():
     name = request.args.get("name")
     if name:
         asana = MyYogi.get_asana(name=name)
-    else: 
+    else:
         asana = MyYogi.get_random_asana()
     return render_template("display_asana.html", name=asana.name, id=asana.id, routine=asana.routine)
+
 
 @app.route("/display_routine")
 def display_routine():
@@ -69,23 +69,27 @@ def display_routine():
     for i in routine:
         asana = MyYogi.get_asana(id=i)
         asana_name.append(asana.name)
-        return render_template("display_routine.html", name_list=asana_name) 
 
-@app.route("/add_asana")
-def add_asana():
-    return render_template("add_asana.html")
+    asana_json = json.dumps(asana_name)
 
-@app.route("/new_asana")
-def new_asana():
+    return render_template("display_routine.html", name_list=asana_json)
+
+
+@app.route("/add_routine")
+def add_routine():
+    return render_template("add_routine.html")
+
+
+@app.route("/new_routine")
+def new_routine():
     name = request.args.get("name")
-    routine = request.args.get("routine")
-    asana = MyYogi.add_asana(name, routine)
-    return redirect(url_for("display_asana", name=asana.name))
+    user_id = session["user_id"]
+    routine = MyYogi.save_routine(name, user_id)
+    return redirect(url_for("user_home"))
 
 
-#### don't add to git w key unrandom
-# app.secret_key = os.urandom(24)
-app.secret_key = "jhdjfhakhdfsafd"
+app.secret_key = "jdfkafjdksah"
 
-if __name__=="__main__":
+if __name__ == "__main__":
+
     app.run(debug=True)
