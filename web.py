@@ -34,7 +34,8 @@ def login():
 def user_home():
     user = MyYogi.get_user(id=session["user_id"])
     message = "Welcome %s" % user.first_name
-    return render_template("user_home.html", message=message)
+    routines = user.routines
+    return render_template("user_home.html", message=message, routines=routines)
 
 
 @app.route("/add_user")
@@ -62,30 +63,52 @@ def display_asana():
     return render_template("display_asana.html", name=asana.name, id=asana.id, routine=asana.routine)
 
 
+####### find a way to test this!!!!
 @app.route("/display_routine")
 def display_routine():
+    routine_id = request.args.get("routine_id")
     asana_name = []
-    routine = MyYogi.generate_routine(training_data.good_warm_up)
-    for i in routine:
-        asana = MyYogi.get_asana(id=i)
-        asana_name.append(asana.name)
-
-    asana_json = json.dumps(asana_name)
-
-    return render_template("display_routine.html", name_list=asana_json)
+    if routine_id:
+        routine = MyYogi.get_routine(routine_id)
+        for move in routine:
+            asana = MyYogi.get_asana(id=move.asana_id)
+            asana_name.append(asana.name)
+            asana_json = json.dumps(asana_name)
+        return render_template("display_routine.html", name_list=asana_json, saved=True)
+    else:
+        
+        routine = MyYogi.generate_routine(training_data.good_warm_up)
+        for asana in routine:
+            asana = MyYogi.get_asana(id=asana)
+            asana_name.append(asana.name)
+            asana_json = json.dumps(asana_name)
+        return render_template("display_routine.html", name_list=asana_json, saved=False)
 
 
 @app.route("/add_routine")
 def add_routine():
-    return render_template("add_routine.html")
+    save_routine = request.args.get("name_list")
+    return render_template("add_routine.html",name_list=save_routine)
 
 
 @app.route("/new_routine")
 def new_routine():
     name = request.args.get("name")
     user_id = session["user_id"]
+    save_routine = json.loads(request.args.get("name_list"))
     routine = MyYogi.save_routine(name, user_id)
+
+    for i in range(len(save_routine)):
+        asana = MyYogi.get_asana(name=save_routine[i])
+        print asana.id
+        routine_asana = MyYogi.save_routine_asana(asana.id,routine.id,i)
     return redirect(url_for("user_home"))
+
+@app.route("/display_saved_routine")
+def display_saved_routine():
+    routine_id = request.args.get("routine")
+
+    return redirect(url_for("display_routine",routine_id = routine_id ))
 
 
 app.secret_key = "jdfkafjdksah"

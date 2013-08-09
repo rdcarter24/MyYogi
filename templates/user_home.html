@@ -2,11 +2,16 @@
 <body>
     <center>
         <h1> {{message}}</h1>
-        <h3><strong> Get a Rando Yoga Routine </strong></h3></div>
+        <h3><strong> Get a Random Yoga Routine </strong></h3></div>
         <a href="/display_routine"><button>Generate</button></a><br>
 
 
         <h3><strong> Use a Saved Yoga Routine </strong></h3></div>
+        {% for routine in routines %}
+        <a href = "/display_saved_routine?routine={{ routine.id }}">{{ routine.name }}
+        <br>
+        <input type="hidden" name="routine_id" value="{{ routine }}"/>
+        {% endfor %}
         
 
         <!-- <a href="/add_asana"><button>Add Asana</button></a><br>

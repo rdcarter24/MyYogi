@@ -60,12 +60,12 @@ class Routine(Base):
 
     user = relationship("User", backref=backref("routines", order_by=id))
 
-
-class Routine_Move(Base):
-    __tablename__ = "routine_moves"
+#reference by asana id insead of name, and change move to asana
+class Routine_Asana(Base):
+    __tablename__ = "routine_asanas"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(64), nullable=False)
+    asana_id = Column(Integer, nullable=False)
     routine_id = Column(Integer, ForeignKey('routines.id')) 
     order = Column(Integer, nullable=False)
     length = Column(Integer, nullable=True)

@@ -1,12 +1,15 @@
 <html>
 <body>
-    <center><form action="/new_routine">
-        <label for="name">Enter Routine Name</label>
-        <input type="text" name="name" placeholder="Name" required/>
-        <br></br>
+    <center>
+        <form action="/new_routine">
+            <label for="name">Enter Routine Name</label>
+            <input type="hidden" name="name_list" value="{{ name_list }}"/>
+            <input type="text" name="name" placeholder="Name" required/>
+            <br></br>
         
-        <input type="submit" value="SUBMIT"/>
-    </form></center>
+            <input type="submit" value="SUBMIT"/>
+        </form>
+    </center>
 
    
 </body>

@@ -49,6 +49,21 @@ def save_routine(name, user_id):  # make number of arguments flexible (*kwargs)
     model.session.commit()
     return routine
 
+def save_routine_asana(asana_id, routine_id,order):
+    routine_asana = model.Routine_Asana(asana_id=asana_id, routine_id=routine_id, order=order)
+    model.session.add(routine_asana)
+    model.session.commit()
+    return
+
+def get_routine(routine_id):
+    routine = model.session.query(model.Routine_Asana).filter_by(routine_id = routine_id).all()
+
+    return routine
+    # routine_move=model.Routine_Move(name=name, routine_id=routine_id, order=order)
+    # model.session.add(routine_move)
+    # model.session.commit()
+    # return routine
+
 
 ############# Helper Functions ############
 
@@ -63,7 +78,7 @@ def choose_ngram(w1, w2):
     rand = round(random.random(),1)
     if rand <= w1:
         return "tri"
-    elif rand <= w2:
+    else:
         return "quad"
 
 
