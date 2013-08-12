@@ -1,6 +1,4 @@
 
-
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,76 +7,49 @@
 
 </head>
 <body>
-  
 
-<!-- loop thru name_list in jquery and display each item using save function -->
+
 <div id = "save_feedback"></div>
 
 
 <script>
 
-var name_list = {{ name_list | safe}};
-t = 0;
-x = 0;
-for (var i = 0; i < name_list.length; i++) {
+// BUG!!! displays asana before fading in
+var asana_list = {{ asana_list | safe }};
+var asana_time = {{ asana_time | safe }};
 
+var t = 0;
+var x = 0;
+for (var i = 0; i < asana_list.length; i++){
     console.log(t)
-    setTimeout(function (){
-    console.log(i)
-    console.log(name_list[x])
-    $('#save_feedback').fadeOut(500);
-    $('#save_feedback').fadeIn(500);
-    $('#save_feedback').html(name_list[x]);
-    
-    x++
-},t);
 
 
-t=t+5000
+    setTimeout(function(){
+        console.log(i)
+        console.log(asana_list[x])
+        $('#save_feedback').fadeOut(500);
+        $('#save_feedback').fadeIn(500);
+        $('#save_feedback').html(asana_list[x]);
+        
+        x++
+    },t);
+
+    console.log(asana_time[i])
+    t=t+(asana_time[i]*1000)
 }
 
 
 </script>
-   
+
+<!-- BUG!!!!!  Needs to have save option after routine excecutes    -->
         <form action="/add_routine">
-            <input type="hidden" name="name_list" value="{{ name_list }}"/>
+            <input type="hidden" name="asana_list" value="{{ asana_list }}"/>
             {% if not saved %}
             <input type="submit" value="Save"/>
             {% endif %}
         </form>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <html>
-<head>
-
-</head>
-
-<body>
-
-{% for item in name_list %}
-    {{ item }}<br>
-{% endfor %}
-
-
-
-</body>
-
-</html>
- -->
 
 
 

@@ -2,13 +2,10 @@
 import training_data
 import random
 #import sciplot
-import numpy as np
+
 import model
 
 
-# unit of time is breath about = 4 sec
-breath = 4 
-time = 2*60
 
 ########### Query Functions ############
 ###### Asanas
@@ -57,12 +54,8 @@ def save_routine_asana(asana_id, routine_id,order):
 
 def get_routine(routine_id):
     routine = model.session.query(model.Routine_Asana).filter_by(routine_id = routine_id).all()
-
     return routine
-    # routine_move=model.Routine_Move(name=name, routine_id=routine_id, order=order)
-    # model.session.add(routine_move)
-    # model.session.commit()
-    # return routine
+
 
 
 ############# Helper Functions ############
@@ -74,6 +67,16 @@ def rando_choice(data_list):
     choice = data_list[num]
     return choice
 
+
+def time_variance(obj):
+    rand = round(random.random(),1)
+    num = random.randint(0,len(obj.variance))
+    if rand > .5:
+        time = obj.breaths + num
+    else:
+        time = obj.breaths - num 
+
+
 def choose_ngram(w1, w2):
     rand = round(random.random(),1)
     if rand <= w1:
@@ -82,44 +85,71 @@ def choose_ngram(w1, w2):
         return "quad"
 
 
-def generate_routine(training_data):
+def generate_routine(training_data, time):
     trigram_dict = {}
     trigram_chain = [] 
 
+    # convert given time in min to number of breaths
+    time_in_sec = time * 60
+    breath = 4
+    num_breaths = time_in_sec/breath
+    breaths = 0
+
 
     for i in range(len(training_data)-2):
-        move1 = training_data[i]
-        move2 = training_data[i+1]
-        move3 = training_data[i+2]
+        asana1 = model.session.query(model.Asana).filter_by(id=training_data[i]).first()
+        asana2 = model.session.query(model.Asana).filter_by(id=training_data[i+1]).first()
+        asana3 = model.session.query(model.Asana).filter_by(id=training_data[i+2]).first()
+        
 
-        key = (move1,move2)
 
-        trigram_dict.setdefault(key,[]).append(move3)
-    
-   
-    start_key = (training_data[0],training_data[1])
+        key = (asana1, asana2)
+        trigram_dict.setdefault(key,[]).append(asana3)
+
+
+    start_key = (model.session.query(model.Asana).filter_by(id=training_data[0]).first(),model.session.query(model.Asana).filter_by(id=training_data[1]).first())
+
+
+
     options_list = trigram_dict[start_key]
+
     chosen_option = rando_choice(options_list)
 
-    trigram_chain.extend([start_key[0],start_key[1],chosen_option])
+    trigram_chain.extend([(start_key[0],start_key[0].breaths),(start_key[1],start_key[1].breaths),(chosen_option,chosen_option.breaths)])
 
+
+
+    # for item in trigram_chain:
+    #     asana =  model.session.query(model.Asana).filter_by(id=item).first()
+    #     trigram_chain.append(asana)
+       
     new_key = (start_key[1],chosen_option)
 
 
 
-    for i in range(len(training_data)-3):
-        if new_key in trigram_dict:
-            option_list = trigram_dict[new_key]
 
+    while breaths <= num_breaths:
+        if new_key in trigram_dict:
+
+            option_list = trigram_dict[new_key]
             chosen_option = rando_choice(option_list)
-            trigram_chain.append(chosen_option)
+            breaths += chosen_option.breaths 
+
+            trigram_chain.append((chosen_option, chosen_option.breaths))
 
             new_key = (new_key[1],chosen_option)
 
+
         else:
+            # BUG!!!   its pooping out if new_key is not in trigram_dict
             break
     return trigram_chain
 
+
+
+generate_routine(training_data.good_warm_up, 10)             
+
+    
 
 ########### Build Up Routine #########
 '''
@@ -174,54 +204,54 @@ while time > 0:
 ########### Trigram Markov ###############
 
 
-class Trigram(object):
-    def __init__(self):
-        self.name = None
+# class Trigram(object):
+#     def __init__(self):
+#         self.name = None
 
 
-# takes in a training data set and returns a markov dictionary
-    def read_training_data(self, training_data):
-        trigram_dict = {}
+# # takes in a training data set and returns a markov dictionary
+#     def read_training_data(self, training_data):
+#         trigram_dict = {}
      
 
-        for i in range(len(training_data)-2):
-            move1 = training_data[i]
-            move2 = training_data[i+1]
-            move3 = training_data[i+2]
+#         for i in range(len(training_data)-2):
+#             move1 = training_data[i]
+#             move2 = training_data[i+1]
+#             move3 = training_data[i+2]
 
-            key = (move1,move2)
+#             key = (move1,move2)
 
-            trigram_dict.setdefault(key,[]).append(move3)
+#             trigram_dict.setdefault(key,[]).append(move3)
         
-        return trigram_dict
+#         return trigram_dict
 
 
-# takes in a markov dictionary and returns a predicted yoga routine
-    def make_prediction(self, d):
-        trigram_chain = []
+# # takes in a markov dictionary and returns a predicted yoga routine
+#     def make_prediction(self, d):
+#         trigram_chain = []
 
-        start_key = (0,2)
-        options_list = d[start_key]
-        chosen_option = rando_choice(options_list)
+#         start_key = (0,2)
+#         options_list = d[start_key]
+#         chosen_option = rando_choice(options_list)
 
-        trigram_chain.extend([start_key[0],start_key[1],chosen_option])
+#         trigram_chain.extend([start_key[0],start_key[1],chosen_option])
 
-        new_key = (start_key[1],chosen_option)
+#         new_key = (start_key[1],chosen_option)
 
 
 
-        for i in range(len(training_data.good_warm_up)-3):
-            if new_key in d:
-                option_list = d[new_key]
+#         for i in range(len(training_data.good_warm_up)-3):
+#             if new_key in d:
+#                 option_list = d[new_key]
 
-                chosen_option = rando_choice(option_list)
-                trigram_chain.append(chosen_option)
+#                 chosen_option = rando_choice(option_list)
+#                 trigram_chain.append(chosen_option)
 
-                new_key = (new_key[1],chosen_option)
+#                 new_key = (new_key[1],chosen_option)
 
-            else:
-                break
-        return trigram_chain
+#             else:
+#                 break
+#         return trigram_chain
 
 
 

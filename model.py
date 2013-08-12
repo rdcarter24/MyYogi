@@ -28,8 +28,8 @@ class Asana(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(64), nullable=False)
     image = Column(String(64), nullable=True)
-    side = Column(String(1), nullable=True)
-    routine = Column(String(64), nullable=True)
+    # side = Column(String(1), nullable=True)
+    # routine = Column(String(64), nullable=True)
     breaths = Column(Integer, nullable=True)
     variance = Column(Integer, nullable=True)
 
@@ -38,9 +38,12 @@ class Flow(Base):
     __tablename__ = "flows"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(64), nullable= False)
-    sequence = Column(String(64), nullable=True) 
-    cycles = Column(Integer, nullable=True)
+    asana_id = Column(Integer, ForeignKey('asanas.id'))
+    flow_id = Column(Integer, nullable=False) 
+    order =Column(Integer, nullable=False)
+    breaths = Column(Integer, nullable=True)
+
+    asana = relationship("Asana", backref=backref("flows", order_by=id))
 
 class User(Base):
     __tablename__ = "users"
@@ -56,7 +59,7 @@ class Routine(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(64), nullable= True)
     user_id = Column(Integer, ForeignKey('users.id')) 
-    length = Column(Integer, nullable=True)  
+    breaths = Column(Integer, nullable=True)  
 
     user = relationship("User", backref=backref("routines", order_by=id))
 
@@ -65,13 +68,13 @@ class Routine_Asana(Base):
     __tablename__ = "routine_asanas"
 
     id = Column(Integer, primary_key=True)
-    asana_id = Column(Integer, nullable=False)
+    asana_id = Column(Integer, ForeignKey('asanas.id'))
     routine_id = Column(Integer, ForeignKey('routines.id')) 
     order = Column(Integer, nullable=False)
-    length = Column(Integer, nullable=True)
+    breaths = Column(Integer, nullable=True)
 
-    routine = relationship("Routine",backref=backref("routine_moves", order_by=id))
-
+    routine = relationship("Routine",backref=backref("routine_asanas", order_by=id))
+    asana = relationship("Asana",backref=backref("routine_asanas", order_by=id))
 #use connect function when initializing database
 # def connect():
 #     global ENGINE
