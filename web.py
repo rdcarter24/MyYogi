@@ -82,7 +82,7 @@ def display_routine():
     ##### if user wants new routine 
     ##### generate_routine returns a list of objects of the Asana class
     else:
-        routine = MyYogi.generate_routine(training_data.good_warm_up, 1)
+        routine = MyYogi.generate_routine(training_data.good_warm_up,2)
 
         for obj in routine:
             asana_name.append(obj[0].name)
@@ -95,6 +95,7 @@ def display_routine():
 def add_routine():
     save_routine = request.args.get("asana_list")
     return render_template("add_routine.html", asana_list=save_routine)
+
 
 
 @app.route("/new_routine")
@@ -114,6 +115,20 @@ def display_saved_routine():
     routine_id = request.args.get("routine")
 
     return redirect(url_for("display_routine", routine_id=routine_id ))
+
+
+@app.route("/rate_routine")
+def rate_routine():
+    rate_routine = json.loads(request.args.get("asana_list"))
+    return render_template("rate_routine.html", asana_list=rate_routine)
+
+
+@app.route("/new_rated_routine")
+def rated_routine():
+    rated_routine = request.args.get("1") 
+
+    return redirect(url_for("user_home"))
+
 
 
 app.secret_key = "jdfkafjdksah"

@@ -2,7 +2,6 @@
 import training_data
 import random
 #import sciplot
-
 import model
 
 
@@ -24,6 +23,12 @@ def add_asana(name, routine):  # make number of arguments flexible (*kwargs)
     model.session.add(asana)
     model.session.commit()
     return asana
+
+######## Flows
+def get_flow(**kwargs):
+    for key in kwargs:
+        flow = model.session.query(model.Flow).filter(getattr(model.Flow,key) == kwargs[key]).all()
+    return flow   
 
 ######## Users
 def get_user(**kwargs):
@@ -59,9 +64,6 @@ def get_routine(routine_id):
 
 
 ############# Helper Functions ############
-
-
-
 def rando_choice(data_list):
     num = random.randint(0, len(data_list) - 1)
     choice = data_list[num]
@@ -95,68 +97,80 @@ def generate_routine(training_data, time):
     num_breaths = time_in_sec/breath
     breaths = 0
 
+    ############  Set up dictionary
+    for i in range(len(training_data)):
+        for j in range(len(training_data[i])-2):
+            asana1 = training_data[i][j]
+            asana2 = training_data[i][j+1]
+            asana3 = training_data[i][j+2]
+            
+            key = (asana1, asana2)
+            trigram_dict.setdefault(key,[]).append(asana3)
 
-    for i in range(len(training_data)-2):
-        asana1 = model.session.query(model.Asana).filter_by(id=training_data[i]).first()
-        asana2 = model.session.query(model.Asana).filter_by(id=training_data[i+1]).first()
-        asana3 = model.session.query(model.Asana).filter_by(id=training_data[i+2]).first()
-        
-
-
-        key = (asana1, asana2)
-        trigram_dict.setdefault(key,[]).append(asana3)
-
-
-    start_key = (model.session.query(model.Asana).filter_by(id=training_data[0]).first(),model.session.query(model.Asana).filter_by(id=training_data[1]).first())
-
-
+    ########### Build list of tuples (obj, obj.time)
+    start_key = (training_data[0][0], training_data[0][1])
+    first_asana = get_asana(id=start_key[0])
+    breaths += first_asana.breaths
+    sec_asana = get_asana(id=start_key[1])
+    breaths += sec_asana.breaths
+    trigram_chain.extend([(first_asana,first_asana.breaths),(sec_asana,sec_asana.breaths)])
 
     options_list = trigram_dict[start_key]
-
     chosen_option = rando_choice(options_list)
 
-    trigram_chain.extend([(start_key[0],start_key[0].breaths),(start_key[1],start_key[1].breaths),(chosen_option,chosen_option.breaths)])
-
-
-
-    # for item in trigram_chain:
-    #     asana =  model.session.query(model.Asana).filter_by(id=item).first()
-    #     trigram_chain.append(asana)
-       
-    new_key = (start_key[1],chosen_option)
-
-
-
+    ########## Check if option is an asana or flow
+    if chosen_option >= 100:
+        flow = get_flow(flow_id=chosen_option)
+        for chosen_option in flow:
+            breaths += chosen_option.breaths 
+            trigram_chain.append((chosen_option.asana, chosen_option.breaths))
+        new_key = (flow[-2].asana.id, flow[-1][0].asana.id)
+    else:
+        third_asana = get_asana(id=chosen_option)
+        trigram_chain.append((third_asana, third_asana.breaths))
+        new_key = (start_key[1], chosen_option)
 
     while breaths <= num_breaths:
         if new_key in trigram_dict:
-
             option_list = trigram_dict[new_key]
             chosen_option = rando_choice(option_list)
-            breaths += chosen_option.breaths 
+            if chosen_option >= 100:
+                flow = get_flow(flow_id=chosen_option)
+                for asana in flow:
+                    breaths += asana.breaths 
+                    trigram_chain.append((asana.asana, asana.breaths))
+                #new_key=(flow[-2].asana.id, flow[-1].asana.id)
 
-            trigram_chain.append((chosen_option, chosen_option.breaths))
-
+            else:
+                asana = get_asana(id=chosen_option)
+                breaths += asana.breaths
+                trigram_chain.append((asana, asana.breaths))
             new_key = (new_key[1],chosen_option)
-
-
         else:
             # BUG!!!   its pooping out if new_key is not in trigram_dict
             break
+    
     return trigram_chain
 
 
 
-generate_routine(training_data.good_warm_up, 10)             
-
-    
-
 ########### Build Up Routine #########
-'''
-def awesome_yoga_routine():
-    #generate a warm up routine
-    warm_up = generate_routine(training_data.good_warm_up, 10)
 
+def get_yoga_routine():
+    routine = []
+    #generate a warm up routine
+    warm_up = generate_routine(training_data.good_warm_up, 2)
+
+    warrior = generate_routine(training_data.good_warrior, 2)
+
+    # for asana in warrior:
+    #     if model.session.query(model.Asana).filter_by(name=asana[0].name)).first():
+    #         print asana[0].name
+
+    routine = warm_up + warrior
+    return routine
+
+'''
     sun_salutation = query #flow database for sun salutaion
     #warrior series needs to repeat on both sides
 
@@ -180,25 +194,6 @@ def awesome_yoga_routine():
 
 
 
-
-
-
-# always starts with the same first move
-first_move = model.session.query(model.Asana).get(1)
-
-prev_move = first_move
-
-
-while time > 0:
-    rand = random.randrange(0, model.session.query(model.Asana).count())
-    next_move = model.session.query(model.Asana)[rand]
-    if (next_move.position == prev_move.position or next_move.position == prev_move.position+1 or next_move.position == prev_move.position-1) and next_move.movement != prev_move.movement:
-        
-        time = time - next_move.time * breath
-        prev_move = next_move
-
-
-'''
 
 
 ########### Trigram Markov ###############
@@ -258,7 +253,7 @@ while time > 0:
 
 
 ################### Quadgram Markov ###############
-'''
+
 class Quadgram(object):
     def __init__(self):
         self.name = None
@@ -346,58 +341,5 @@ def compare_methods(training_data):
     return min(error_dict.items(), key=lambda x: x[1])[0]
 
 compare_methods(training_data.good_warm_up)
-
-
-################# ngram class
- 
-class Ngram(object,n):
-    def __init__(self):
-        self.n = None
-
-
-# takes in a training data set and returns a markov dictionary
-    def read_training_data(self, training_data):
-        ngram_dict = {}
-      #n=3
-
-        for i in range(len(training_data)-(n-1)):
-            for j in range(1, n)
-                move n = training_data[i+(n-1)]
-                move2 = training_data[i+1]
-                move3 = training_data[i+2]
-
-                key = (move1,move2)
-
-                trigram_dict.setdefault(key,[]).append(move3)
-            
-        return trigram_dict
-
-
-# takes in a markov dictionary and returns a predicted yoga routine
-    def make_prediction(self, d):
-        trigram_chain = []
-
-        start_key = (0,2)
-        options_list = d[start_key]
-        chosen_option = rando_choice(options_list)
-
-        trigram_chain.extend([start_key[0],start_key[1],chosen_option])
-
-        new_key = (start_key[1],chosen_option)
-
-
-
-        for i in range(len(training_data.good_warm_up)-3):
-            if new_key in d:
-                option_list = d[new_key]
-
-                chosen_option = rando_choice(option_list)
-                trigram_chain.append(chosen_option)
-
-                new_key = (new_key[1],chosen_option)
-
-            else:
-                break
-        return trigram_chain
 
 '''
