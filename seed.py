@@ -25,7 +25,7 @@ def load_flows(session):
 
 def main(session):
     load_asanas(session)
-    #load_flows(session)
+    load_flows(session)
 
 
 if __name__=="__main__":

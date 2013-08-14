@@ -82,7 +82,7 @@ class Feedback_Asana(Base):
     id = Column(Integer, primary_key=True)
     asana_id = Column(Integer, ForeignKey('asanas.id'))
     routine_id = Column(Integer, ForeignKey('routines.id')) 
-    order = Column(Integer, nullable=False)
+    rating = Column(Integer, nullable=False)
     
     routine = relationship("Routine",backref=backref("feedback_asanas", order_by=id))
     asana = relationship("Asana",backref=backref("feedback_asanas", order_by=id))

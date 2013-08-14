@@ -4,6 +4,7 @@ import training_data
 import model
 import os
 import json
+import re
 
 app = Flask(__name__)
 
@@ -97,8 +98,8 @@ def add_routine():
     return render_template("add_routine.html", asana_list=save_routine)
 
 
-
-@app.route("/new_routine")
+########## use POST!!!
+@app.route("/new_routine", methods=["POST"])
 def new_routine():
     name = request.args.get("name")
     user_id = session["user_id"]
@@ -119,13 +120,25 @@ def display_saved_routine():
 
 @app.route("/rate_routine")
 def rate_routine():
-    rate_routine = json.loads(request.args.get("asana_list"))
-    return render_template("rate_routine.html", asana_list=rate_routine)
+    asana_list = json.loads(request.args.get("asana_list"))
+    return render_template("rate_routine.html", asana_list=asana_list)
 
 
-@app.route("/new_rated_routine")
-def rated_routine():
-    rated_routine = request.args.get("1") 
+@app.route("/train_routine", methods=["POST"])
+def train_routine():
+    rated_routine = request.form.get("asana")
+    asana_string = request.form.get("asana_list")
+    asana_list = asana_string.split(',')
+    routine = MyYogi.save_routine("train", "0")
+
+############ BUG!!! prints 1 for asana everytime it shows up if in request.form
+    for item in asana_list:
+        if item in request.form:
+            asana = MyYogi.get_asana(name=item)
+            asana = MyYogi.train_routine_asana(asana.id, routine.id, "1")
+        else:
+            asana = MyYogi.get_asana(name=item)
+            asana = MyYogi.train_routine_asana(asana.id, routine.id, "0")
 
     return redirect(url_for("user_home"))
 

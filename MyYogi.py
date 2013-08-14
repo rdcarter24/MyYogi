@@ -51,7 +51,7 @@ def save_routine(name, user_id):  # make number of arguments flexible (*kwargs)
     model.session.commit()
     return routine
 
-def save_routine_asana(asana_id, routine_id,order):
+def save_routine_asana(asana_id, routine_id, order):
     routine_asana = model.Routine_Asana(asana_id=asana_id, routine_id=routine_id, order=order)
     model.session.add(routine_asana)
     model.session.commit()
@@ -61,7 +61,12 @@ def get_routine(routine_id):
     routine = model.session.query(model.Routine_Asana).filter_by(routine_id = routine_id).all()
     return routine
 
-
+######## BUG!! maybe add and order
+def train_routine_asana(asana_id, routine_id, rating):
+    train_routine_asana = model.Feedback_Asana(asana_id=asana_id, routine_id=routine_id, rating=rating)
+    model.session.add(train_routine_asana)
+    model.session.commit()
+    return
 
 ############# Helper Functions ############
 def rando_choice(data_list):
@@ -70,6 +75,7 @@ def rando_choice(data_list):
     return choice
 
 
+###### need to carry "breaths" after implementing this
 def time_variance(obj):
     rand = round(random.random(),1)
     num = random.randint(0,len(obj.variance))
@@ -156,19 +162,23 @@ def generate_routine(training_data, time):
 
 ########### Build Up Routine #########
 
-def get_yoga_routine():
+def get_yoga_routine(training_data):
     routine = []
     #generate a warm up routine
-    warm_up = generate_routine(training_data.good_warm_up, 2)
+    warm_up = generate_routine(training_data.good_warm_up, 2, "warm_up")
 
-    warrior = generate_routine(training_data.good_warrior, 2)
+    warrior = generate_routine(training_data.good_warrior, 2, "warrior")
 
     # for asana in warrior:
     #     if model.session.query(model.Asana).filter_by(name=asana[0].name)).first():
     #         print asana[0].name
 
-    routine = warm_up + warrior
+    routine.append(warm_up)
+    routine.append(warrior)
+
     return routine
+
+
 
 '''
     sun_salutation = query #flow database for sun salutaion
