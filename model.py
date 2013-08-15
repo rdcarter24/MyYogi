@@ -29,7 +29,7 @@ class Asana(Base):
     name = Column(String(64), nullable=False)
     image = Column(String(64), nullable=True)
     side = Column(String(1), nullable=True)
-    # routine = Column(String(64), nullable=True)
+    sub_routine = Column(String(64), nullable=True)
     breaths = Column(Integer, nullable=True)
     variance = Column(Integer, nullable=True)
 
@@ -72,7 +72,8 @@ class Routine_Asana(Base):
     routine_id = Column(Integer, ForeignKey('routines.id')) 
     order = Column(Integer, nullable=False)
     breaths = Column(Integer, nullable=True)
-
+    sub_routine = Column(String(64), nullable=True)
+    
     routine = relationship("Routine",backref=backref("routine_asanas", order_by=id))
     asana = relationship("Asana",backref=backref("routine_asanas", order_by=id))
 
@@ -82,6 +83,7 @@ class Feedback_Asana(Base):
     id = Column(Integer, primary_key=True)
     asana_id = Column(Integer, ForeignKey('asanas.id'))
     routine_id = Column(Integer, ForeignKey('routines.id')) 
+    sub_routine = Column(String(64), nullable=True)
     rating = Column(Integer, nullable=False)
     
     routine = relationship("Routine",backref=backref("feedback_asanas", order_by=id))

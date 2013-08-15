@@ -9,31 +9,14 @@ function save(){
 
 
 
-<!doctype html>
-<html lang="en">
-<head>
-  
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+if chosen_option >= 100:
+                flow = model.session.query(model.Flow).filter_by(flow_id=chosen_option).all()
+                for chosen_option in flow:
+                    breaths += chosen_option.breaths 
+                    trigram_chain.append((chosen_option.asana, chosen_option.breaths))
+                new_key=(chosen_option[-2],chosen_option[-1])
 
-</head>
-<body>
-  
-<input type="button" value="Save" onclick="save();"/>
-<!-- loop thru name_list in jquery and display each item using save function -->
-<div id = "save_feedback"></div>
-{% for item in name_list %}
-
-<script>
-function save(){
-// // jquery for loop here
-
-    $('#save_feedback').html("{{item}}");
-    $('#save_feedback').fadeIn(500);
-    $('#save_feedback').delay(2000);
-    $('#save_feedback').fadeOut(500);
-
-}
-</script>
-{% endfor %}
-</body>
-</html>
+            else:
+                breaths += chosen_option.breaths 
+                trigram_chain.append((chosen_option, chosen_option.breaths))
+                new_key = (new_key[1],chosen_option)

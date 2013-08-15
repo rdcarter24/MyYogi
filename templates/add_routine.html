@@ -3,7 +3,8 @@
     <center>
         <form action="/new_routine" method="POST">
             <label for="name">Enter Routine Name</label>
-            <input type="hidden" name="asana_list" value="{{ asana_list }}"/>           
+            <input type="hidden" name="asana_list" value="{{ asana_list }}"/>
+            <input type="hidden" name="sub_routine_list" value="{{ sub_routine_list }}"/> 
             <input type="text" name="name" placeholder="Name" required/>
             <br></br>
         

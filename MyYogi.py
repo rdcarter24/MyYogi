@@ -3,15 +3,20 @@ import training_data
 import random
 #import sciplot
 import model
+from sqlalchemy import and_
 
 
 
 ########### Query Functions ############
 ###### Asanas
-def get_random_asana():
+
+####### BUG!!! get random asana based on routine
+def get_random_asana(sub_routine):
     rand = random.randrange(0, model.session.query(model.Asana).count())
-    rand_asana = model.session.query(model.Asana)[rand]
+    rand_asana = model.session.query(model.Asana).filter_by.and_(id=rand, sub_routine=sub_routine).one()
     return rand_asana
+
+get_random_asana("warm_up")
 
 def get_asana(**kwargs):
     for key in kwargs:
@@ -51,8 +56,8 @@ def save_routine(name, user_id):  # make number of arguments flexible (*kwargs)
     model.session.commit()
     return routine
 
-def save_routine_asana(asana_id, routine_id, order):
-    routine_asana = model.Routine_Asana(asana_id=asana_id, routine_id=routine_id, order=order)
+def save_routine_asana(asana_id, routine_id, order, sub_routine):
+    routine_asana = model.Routine_Asana(asana_id=asana_id, routine_id=routine_id, order=order, sub_routine=sub_routine)
     model.session.add(routine_asana)
     model.session.commit()
     return
@@ -61,9 +66,9 @@ def get_routine(routine_id):
     routine = model.session.query(model.Routine_Asana).filter_by(routine_id = routine_id).all()
     return routine
 
-######## BUG!! maybe add and order
-def train_routine_asana(asana_id, routine_id, rating):
-    train_routine_asana = model.Feedback_Asana(asana_id=asana_id, routine_id=routine_id, rating=rating)
+######## BUG!! maybe add an order
+def train_routine_asana(asana_id, routine_id, sub_routine, rating):
+    train_routine_asana = model.Feedback_Asana(asana_id=asana_id, routine_id=routine_id, sub_routine=sub_routine, rating=rating)
     model.session.add(train_routine_asana)
     model.session.commit()
     return
@@ -85,15 +90,15 @@ def time_variance(obj):
         time = obj.breaths - num 
 
 
-def choose_ngram(w1, w2):
+def coin_toss(input):
     rand = round(random.random(),1)
-    if rand <= w1:
-        return "tri"
+    if rand <= input:
+        return True
     else:
-        return "quad"
+        return False
 
 
-def generate_routine(training_data, time):
+def generate_routine(training_data, time, sub_routine):
     trigram_dict = {}
     trigram_chain = [] 
 
@@ -140,13 +145,17 @@ def generate_routine(training_data, time):
         if new_key in trigram_dict:
             option_list = trigram_dict[new_key]
             chosen_option = rando_choice(option_list)
-            if chosen_option >= 100:
+
+            if coin_toss(.1) == True: # gets a random asana on occasion
+                asana = get_random_asana(sub_routine)
+                breaths += asana.breaths
+                trigram_chain.append((asana, asana.breaths))
+                chosen_option = asana.id
+            elif chosen_option >= 100:
                 flow = get_flow(flow_id=chosen_option)
                 for asana in flow:
                     breaths += asana.breaths 
                     trigram_chain.append((asana.asana, asana.breaths))
-                #new_key=(flow[-2].asana.id, flow[-1].asana.id)
-
             else:
                 asana = get_asana(id=chosen_option)
                 breaths += asana.breaths
@@ -156,30 +165,27 @@ def generate_routine(training_data, time):
             # BUG!!!   its pooping out if new_key is not in trigram_dict
             break
     
-    return trigram_chain
+    return (trigram_chain, sub_routine)
 
 
 
-########### Build Up Routine #########
+########### Build Up Routine with sub routines#########
 
-def get_yoga_routine(training_data):
+def get_yoga_routine(training_data, user_id):
     routine = []
-    #generate a warm up routine
-    warm_up = generate_routine(training_data.good_warm_up, 2, "warm_up")
 
-    warrior = generate_routine(training_data.good_warrior, 2, "warrior")
 
-    # for asana in warrior:
-    #     if model.session.query(model.Asana).filter_by(name=asana[0].name)).first():
-    #         print asana[0].name
+    warm_up = generate_routine(training_data.customize(user_id), 2, "warm_up")
+
+    warrior = generate_routine(training_data.customize(user_id), 2, "warrior")
+
 
     routine.append(warm_up)
     routine.append(warrior)
 
     return routine
 
-
-
+#get_yoga_routine(training_data)
 '''
     sun_salutation = query #flow database for sun salutaion
     #warrior series needs to repeat on both sides
