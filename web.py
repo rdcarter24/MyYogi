@@ -15,23 +15,20 @@ def home():
     return render_template("home.html")
 
 
-############ finish user log in #################
 @app.route("/login")
 def login():
     email = request.args.get("email")
     password = request.args.get("password")
-    try:
-        user = MyYogi.get_user(email=email, password=password)
-        if user:
-            session["user_id"]=user.id
-            return redirect(url_for("user_home"))
-    except model.NoResultFound, e:
-        print e
+    user = MyYogi.get_user(email=email, password=password)
+    if user:
+        session["user_id"]=user.id
+        return redirect(url_for("user_home"))
+    else:
         message = "This is embarassing... It appears we don't have that login on file."
         return render_template("home.html", message=message)
 
 
-@app.route("/user_home")
+@app.route("/user_home", methods=["GET"])
 def user_home():
     user = MyYogi.get_user(id=session["user_id"])
     message = "Welcome %s" % user.first_name
@@ -65,10 +62,11 @@ def display_asana():
 
 
 ####### find a way to test this!!!!
+##### unit test for routine_id
 @app.route("/display_routine")
 def display_routine():
     routine_id = request.args.get("routine_id")
-    asana_name = []
+    asana_img = []
     asana_time = []
     sub_routine_list =[]
 
@@ -78,8 +76,8 @@ def display_routine():
         routine = MyYogi.get_routine(routine_id)
 
         for obj in routine:
-            asana_name.append(obj.asana.name)
-            asana_json = json.dumps(asana_name)
+            asana_img.append(obj.asana.image)
+            asana_json = json.dumps(asana_img)
             asana_time.append(obj.asana.breaths)
             sub_routine_list.append(obj.sub_routine)
             sub_routine_json=json.dumps(sub_routine_list)
@@ -92,8 +90,8 @@ def display_routine():
 
         for i in range(len(routine)):
             for obj in routine[i][0]:
-                asana_name.append(obj[0].name)
-                asana_json = json.dumps(asana_name)
+                asana_img.append(obj[0].image)
+                asana_json = json.dumps(asana_img)
                 asana_time.append(obj[1])
                 sub_routine_list.append(routine[i][1])
                 sub_routine_json=json.dumps(sub_routine_list)
@@ -118,7 +116,7 @@ def new_routine():
     routine = MyYogi.save_routine(name, user_id)
 
     for i in range(len(save_routine)):
-        asana = MyYogi.get_asana(name=save_routine[i])
+        asana = MyYogi.get_asana(image=save_routine[i])
         routine_asana = MyYogi.save_routine_asana(asana.id,routine.id,i, sub_routine_list[i])
     return redirect(url_for("user_home"))
 
@@ -147,13 +145,13 @@ def train_routine():
     no_dupl =[]
     for i in range(len(asana_list)):
         if asana_list[i] in request.form and asana_list[i] not in no_dupl:
-            asana = MyYogi.get_asana(name=asana_list[i])
+            asana = MyYogi.get_asana(image=asana_list[i])
             asana = MyYogi.train_routine_asana(asana.id, routine.id, sub_routine_list[i], "1")
             no_dupl.append(asana_list[i])
             print no_dupl
         ############# maybe don't need this part    
         else:
-            asana = MyYogi.get_asana(name=asana_list[i])
+            asana = MyYogi.get_asana(image=asana_list[i])
             asana = MyYogi.train_routine_asana(asana.id, routine.id, sub_routine_list[i], "0")
 
     return redirect(url_for("user_home"))

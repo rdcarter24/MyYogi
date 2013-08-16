@@ -90,11 +90,11 @@ class Feedback_Asana(Base):
     asana = relationship("Asana",backref=backref("feedback_asanas", order_by=id))
 
 #use connect function when initializing database
-# def connect():
-#     global ENGINE
-#     global Session
+def connect():
+    global ENGINE
+    global Session
 
-#     ENGINE = create_engine("sqlite:///yoga.db", echo=True)
-#     Session = sessionmaker(bind=ENGINE)
+    ENGINE = create_engine("sqlite:///yoga.db", echo=True)
+    Session = sessionmaker(bind=ENGINE)
 
-#     return Session()
+    return Session()

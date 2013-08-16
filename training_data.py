@@ -25,6 +25,7 @@ for routine in routines:
     warrior_train =[]
     for obj in routine.feedback_asanas:
         ########### posible BUG!!! links all "1"s as if continuous flow
+        #####solution while i+1 != 0
         if obj.rating == "1" and obj.sub_routine == "warm_up":
             warm_up_train.append(obj.asana_id)
 

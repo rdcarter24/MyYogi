@@ -16,7 +16,7 @@ def get_random_asana(sub_routine):
     rand_asana = model.session.query(model.Asana).filter_by.and_(id=rand, sub_routine=sub_routine).one()
     return rand_asana
 
-get_random_asana("warm_up")
+#get_random_asana("warm_up")
 
 def get_asana(**kwargs):
     for key in kwargs:
@@ -39,7 +39,13 @@ def get_flow(**kwargs):
 def get_user(**kwargs):
     for key in kwargs:
         user = model.session.query(model.User).filter(getattr(model.User,key) == kwargs[key]).first()
-    return user   
+    if user:
+        return user
+    else:
+        return None  
+
+   
+         
 
 
 def add_user(email, password, first_name): 
@@ -147,10 +153,11 @@ def generate_routine(training_data, time, sub_routine):
             chosen_option = rando_choice(option_list)
 
             if coin_toss(.1) == True: # gets a random asana on occasion
-                asana = get_random_asana(sub_routine)
-                breaths += asana.breaths
-                trigram_chain.append((asana, asana.breaths))
-                chosen_option = asana.id
+                pass
+                # asana = get_random_asana(sub_routine)
+                # breaths += asana.breaths
+                # trigram_chain.append((asana, asana.breaths))
+                # chosen_option = asana.id
             elif chosen_option >= 100:
                 flow = get_flow(flow_id=chosen_option)
                 for asana in flow:
@@ -175,13 +182,13 @@ def get_yoga_routine(training_data, user_id):
     routine = []
 
 
-    warm_up = generate_routine(training_data.customize(user_id), 2, "warm_up")
+    warm_up = generate_routine(training_data.customize(user_id), 1, "warm_up")
 
-    warrior = generate_routine(training_data.customize(user_id), 2, "warrior")
+    warrior = generate_routine(training_data.customize(user_id), 1, "warrior")
 
 
     routine.append(warm_up)
-    routine.append(warrior)
+    #routine.append(warrior)
 
     return routine
 

@@ -8,7 +8,7 @@ def load_asanas(session):
     with open('asana_db.csv','rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
-                asana = model.Asana(name=row[0], side=row[2], sub_routine=row[4], breaths=row[5])
+                asana = model.Asana(name=row[0], side=row[2], image=row[3], sub_routine=row[4], breaths=row[5])
                 session.add(asana)
     session.commit()        
 
