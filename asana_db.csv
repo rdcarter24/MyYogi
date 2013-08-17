@@ -1,46 +1,33 @@
-start_mountain,1,,,warm-up,4
-mountain,2,,,warm-up,1
-arms_up,3,,/static/img/arms_up.jpg,warm-up,1
-forward_fold,4,,/static/img/forward_fold.jpg,warm-up,1
-hold_forward_fold,5,,,warm-up,4
-hold_chair,6,,,warm-up,4
-monkey,7,,/static/img/monkey.jpg,warm-up,1
-runners_lunge_L,8,,,warm-up,1
-runners_lunge_R,9,,,warm-up,4
-plank,10,,,warm-up,1
-hold_plank,11,,,warm-up,4
-table_top,12,,,warm-up,4
-down_dog,13,,,warm-up,4
-hold_down_dog,14,,,warm-up,4
-cobra,15,,,warm-up,4
-childs_pose,16,,,warm-up,4
-seated,17,,,warm-up,4
-three_leg_down_dog_L,18,,,warm-up,4
-three_leg_down_dog_R,19,,,warm-up,4
-high_lunge_L,20,,,warrior,4
-high_lunge_R,21,,,warrior,4
-padangusth,22,,,warrior,4
-padahast,23,,,warrior,4
-Warrior1_L,24,L,,warrior,8
-Warrior1_R,25,R ,,warrior,8
-parsvottan_L,26,L,,warrior,4
-parsvottan_R,27,R ,,warrior,4
-Warrior2_L,28,L,,warrior,8
-Warrior2_R,29,R ,,warrior,8
-Reverse_Warrior_L,30,L,,warrior,4
-Reverse_Warrior_R,31,R ,,warrior,4
-side_angle_L,32,L,,warrior,4
-side_angle_R,33,R ,,warrior,4
-Inverted_side_angle_L,34,L,,warrior,4
-Inverted_side_angle_R,35,R ,,warrior,4
-Utthita_Pars_L,36,L,,warrior,4
-utthita_Pars_R,37,R ,,warrior,4
-parivrtta_Pars_L,38,L,,warrior,4
-parivrtta_Pars_R,39,R ,,warrior,4
-prasaritaA,40,,,warrior,4
-prasaritaB,41,,,warrior,4
-prasaritaC,42,,,warrior,4
-prasaritaD,43,,,warrior,4
-*vinyassa,44,,,warrior,4
-low_plank,45,,,warm-up,1
-up_dog,46,,,warm-up,1
+start_mountain,1,,/static/img/start_mountain.jpg,,8
+mountain,2,,/static/img/mountain.jpg,,2
+arms_up,3,,/static/img/arms_up.jpg,warm_up,1
+forward_fold,4,,/static/img/forward_fold.jpg,warm_up,1
+hold_forward_fold,5,,/static/img/hold_forward_fold.jpg,warm_up,8
+hold_chair,6,,/static/img/hold_chair_fold.jpg,warm_up,8
+monkey,7,,/static/img/monkey.jpg,warm_up,1
+runners_lunge,8,,/static/img/runners_lunge.jpg,warm_up,1
+plank,9,,/static/img/plank.jpg,warm_up,1
+hold_plank,10,,/static/img/hold_plank.jpg,warm_up,4
+down_dog,12,,/static/img/down_dog.jpg,warm_up,4
+hold_down_dog,13,,/static/img/hold_down_dog.jpg,warm_up,4
+cobra,14,,/static/img/cobra.jpg,warm_up,4
+childs_pose,15,,,warm_up,4
+seated,16,,,warm_up,4
+three_leg_down_dog,17,,/static/img/three_legged_down_dog.jpg,warm_up,4
+high_lunge,18,,/static/img/high_lunge.jpg,warrior,4
+padangusth,19,,,warrior,4
+padahast,20,,,warrior,4
+Warrior1,21,L,/static/img/warrior1.jpg,warrior,8
+parsvottan,22,L,,warrior,4
+Warrior2,23,L,/static/img/warrior2.jpg,warrior,8
+Reverse_Warrior,24,L,/static/img/reverse_warrior.jpg,warrior,4
+side_angle,25,L,/static/img/side_angle.jpg,warrior,4
+Inverted_side_angle,26,L,,warrior,4
+Utthita_Pars,27,L,/static/img/utthita.jpg,warrior,4
+parivrtta_Pars,28,L,,warrior,4
+prasaritaA,29,,,warrior,4
+prasaritaB,30,,,warrior,4
+prasaritaC,31,,,warrior,4
+prasaritaD,32,,,warrior,4
+low_plank,34,,/static/img/low_plank.jpg,,1
+up_dog,35,,/static/img/up_dog.jpg,,1

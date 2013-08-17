@@ -1,0 +1,28 @@
+<html>
+<body>
+    <center>
+        <p>
+        <form action = "/login">
+            <div id = "login"><h3><strong> Login Below </strong></h3></div>
+            <label for ="email"> Enter Email </label>
+            <input type = "text" name = "email" placeholder = "Email" required/>
+
+            <label for ="password"> Enter Password </label>
+            <input type = "password" name = "password" placeholder = "Password" required/>
+            <input type = "submit" value = "Log In"/>
+        </form>
+        </p>
+
+        <p>
+        <form action = "/add_user">
+            <div id = "add_user"><h3><strong> Sign Up  </strong></h3></div>
+            <input type = "submit" value = "Sign Up"/>
+        </form>
+        </p>
+        <p id = "error"> {{message}} </p>
+        
+        
+
+
+</body>
+</html>

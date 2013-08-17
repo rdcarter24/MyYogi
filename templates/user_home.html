@@ -2,25 +2,33 @@
 <body>
     <center>
         <h1> {{ message }}</h1>
-        <h3><strong> Get a Random Yoga Routine </strong></h3></div>
+        <h2><strong> Get a Random Yoga Routine </strong></h2>
+        <h3> Select a Style </h3>
+        <select>
+            <option value="hatha">Hatha</option>
+            <option value="vinyasa">Vinyasa</option>
+            <option value="ashtanga">Ashtanga</option>
+            <option value="restorative">Restorative</option>
+        </select> <br>
+        <h3> Select a Time Length </h3>
+        <select>
+            <option value="45">45 Min</option>
+            <option value="60">1 Hour</option>
+            <option value="75">1 Hour 15 Min</option>
+        </select> 
+        <h3> Select a Difficulty Level </h3>
+        <select>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select> <br><br>
+
         <a href="/display_routine"><button>Generate</button></a><br>
-
-
-        <h3><strong> Use a Saved Yoga Routine </strong></h3></div>
-        {% for routine in routines %}
-        <a href = "/display_saved_routine?routine={{ routine.id }}">{{ routine.name }}
-        <br>
-        <input type="hidden" name="routine_id" value="{{ routine }}"/>
-        {% endfor %}
         
-
-        <!-- <a href="/add_asana"><button>Add Asana</button></a><br>
- -->
-
-        <!-- <form action="/display_asana">
-            <input type="text" name="name" placeholder="Enter Asana Name"/>
-            <input type="submit" value="Submit"/>
-        </form> -->
-
+        <h3><strong> Use a Saved Yoga Routine </strong></h3>
+        {% for routine in routines %}
+            <a href = "/display_saved_routine?routine={{ routine.id }}">{{ routine.name }}
+            <br>
+            <input type="hidden" name="routine_id" value="{{ routine }}"/>
+        {% endfor %}      
 </body>
 </html>

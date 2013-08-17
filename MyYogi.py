@@ -12,11 +12,10 @@ from sqlalchemy import and_
 
 ####### BUG!!! get random asana based on routine
 def get_random_asana(sub_routine):
-    rand = random.randrange(0, model.session.query(model.Asana).count())
-    rand_asana = model.session.query(model.Asana).filter_by.and_(id=rand, sub_routine=sub_routine).one()
-    return rand_asana
-
-#get_random_asana("warm_up")
+    rand_asana = model.session.query(model.Asana).filter_by(sub_routine = sub_routine).all()
+    print len(rand_asana)
+    rand =  random.randrange(0,len(rand_asana))
+    return rand_asana[rand]
 
 def get_asana(**kwargs):
     for key in kwargs:
@@ -153,11 +152,10 @@ def generate_routine(training_data, time, sub_routine):
             chosen_option = rando_choice(option_list)
 
             if coin_toss(.1) == True: # gets a random asana on occasion
-                pass
-                # asana = get_random_asana(sub_routine)
-                # breaths += asana.breaths
-                # trigram_chain.append((asana, asana.breaths))
-                # chosen_option = asana.id
+                asana = get_random_asana(sub_routine)
+                breaths += asana.breaths
+                trigram_chain.append((asana, asana.breaths))
+                chosen_option = asana.id
             elif chosen_option >= 100:
                 flow = get_flow(flow_id=chosen_option)
                 for asana in flow:
@@ -180,7 +178,6 @@ def generate_routine(training_data, time, sub_routine):
 
 def get_yoga_routine(training_data, user_id):
     routine = []
-
 
     warm_up = generate_routine(training_data.customize(user_id), 1, "warm_up")
 
