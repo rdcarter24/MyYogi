@@ -1,12 +1,23 @@
 <html>
 <head>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+    <script src="//use.edgefonts.net/shadows-into-light.js"></script>
+
     <style>
         #image{
-            
+            /*make images smaller*/
         }
     </style>
 <body>
-    <center>            
+    <center>     
         <form action="/train_routine" method="POST">
             <input type="hidden" name="asana_list" value="{{ asana_list | join(",")}}"/> 
             <input type="hidden" name="sub_routine_list" value="{{ sub_routine_list }}"/>
@@ -15,7 +26,7 @@
                 <input type="checkbox" name="{{asana}}" value="{{1}}" />
                 <br>
             {% endfor %}
-             <input type="submit" value="SUBMIT"/>
+            <input style="font-family: shadows-into-light" class = "btn" type="submit" value="Submit"/>
         </form>
     </center>
 </body>

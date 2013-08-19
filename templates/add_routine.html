@@ -1,14 +1,34 @@
 <html>
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+    <script src="//use.edgefonts.net/shadows-into-light.js"></script>
+</head> 
 <body>
-    <center>
-        <form action="/new_routine" method="POST">
-            <label for="name">Enter Routine Name</label>
-            <input type="hidden" name="asana_list" value="{{ asana_list }}"/>
-            <input type="hidden" name="sub_routine_list" value="{{ sub_routine_list }}"/> 
-            <input type="text" name="name" placeholder="Name" required/>
-            <br></br>
-            <input type="submit" value="SUBMIT"/>
-        </form>
-    </center>
+<center>
+    <div class="container-fluid">
+        <div class="row-fluid">    
+            <div class="span12"><br><br>
+                <form action="/new_routine" method="POST">
+                    <h3 style="font-family: shadows-into-light">Enter Routine Name</h3>
+                    <input type="hidden" name="asana_list" value="{{ asana_list }}"/>
+                    <input type="hidden" name="sub_routine_list" value="{{ sub_routine_list }}"/> 
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-heart"></i></span>
+                        <input style="font-family: shadows-into-light" class="span7" type="text" name="name" placeholder="Name" required>
+                    </div>
+                    <br>
+                    <input type="submit" style="font-family: shadows-into-light" class="btn" value="Submit"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</center>
 </body>
 </html>

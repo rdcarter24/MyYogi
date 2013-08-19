@@ -3,31 +3,42 @@
 <html lang="en">
 <head>
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+  <script src="//use.edgefonts.net/shadows-into-light.js"></script>
+
   <style>
 
       .submit{
         display : none;
       }
-      #asana_display_container .row{
+      /*#asana_display_container .row{
         position :relative;
         text-align: center;
         float: none;
         margin: 0 auto;
-        height:300px;
+        height:300px;*/
       }
-      #save_feedback img {
-        height:250px;
+      /*#save_feedback img {
         position:absolute;
         bottom:0;
         left:50%;
-      }
+      }*/
 
   </style>
 </head>
-<body>
-    <div id='asana_display_container' class = "container">
+<body><br><br><br><br><br><br><br>
     <center>
-        <div class = "row available span12">
+    <div id='asana_display_container' class = "container">
+    
+        <!-- <div class = "row available span12"> -->
 
         <div class = "sizes" id = "save_feedback"></div>
         </div>
@@ -36,7 +47,7 @@
                 <input type="hidden" name="asana_list" value="{{ asana_list }}"/>
                 <input type="hidden" name="sub_routine_list" value="{{ sub_routine_list }}"/>
                 {% if not saved %}
-                <input type="submit" value="Save"/>
+                <input style="font-family: shadows-into-light" class = "btn" type="submit" value="Save"/>
                 {% endif %}
             </form>
         </div>
@@ -45,12 +56,13 @@
                 <input type="hidden" name="asana_list" value="{{ asana_list }}"/>
                 <input type="hidden" name="sub_routine_list" value="{{ sub_routine_list }}"/>
                 {% if not saved %}
-                <input type="submit" value="Train"/>
+                <input style="font-family: shadows-into-light" class = "btn" type="submit" value="Train"/>
                 {% endif %}
             </form>
         </div>
-    </center>
+    
     </div>
+    </center>
     <script type="text/javascript">
         var asana_list = {{ asana_list | safe }};
         var asana_time = {{ asana_time | safe }};
@@ -62,9 +74,9 @@
 
                 $('#save_feedback').fadeOut(1000,function(){
                     $('#save_feedback').html('<img src="'+asana_list[x]+'"/>').hide(); 
-                    image_width=$('#save_feedback img').width()/2;
-                    var image_text = "-" + image_width + "px";
-                    $('#save_feedback img').css('margin-left', image_text);
+                    // image_width=$('#save_feedback img').width()/2;
+                    // var image_text = "-" + image_width + "px";
+                    // $('#save_feedback img').css('margin-left', image_text);
                     $('#save_feedback').fadeIn(1000);   
 
                     x++

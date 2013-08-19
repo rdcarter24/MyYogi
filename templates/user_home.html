@@ -7,51 +7,64 @@
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-    <script src="//use.edgefonts.net/indie-flower.js"></script>
+
+    <script src="//use.edgefonts.net/shadows-into-light.js"></script>
 
     <style>
     #all{
-        font-family :indie-flower, sans-serif;
+        font-family :shadows-into-light, sans-serif;
     }
+    #drop{
+        font-family :shadows-into-light, sans-serif;
+        font-size: 110%;
+
+    }
+    #title{
+            font-family :shadows-into-light, sans-serif;
+            font-size : 50Px;        }
+        }
     </style>
 </head>
 <body>
     <div id="all">
         <center>
-        <h1> {{ message }}</h1>
+        <h1 id="title"> {{ message }}</h1>
         <div class="container-fluid">
             <div class="row-fluid">
-                 <div class="span6">
-        <h3><strong> Get a Random Yoga Routine </strong></h3>
-        <h4> Select a Style </h4>
-        <select class="span4">
-            <option value="hatha">Hatha</option>
-            <option value="vinyasa">Vinyasa</option>
-            <option value="ashtanga">Ashtanga</option>
-            <option value="restorative">Restorative</option>
-        </select> <br>
-        <h4> Select a Time Length </h4>
-        <select class="span4">
-            <option value="45">45 Min</option>
-            <option value="60">1 Hour</option>
-            <option value="75">1 Hour 15 Min</option>
-        </select> 
-        <h4> Select a Difficulty Level </h4>
-        <select class="span4">
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-        </select> <br><br>
 
-        <a href="/display_routine" ><button class = "btn btn-large">Generate</button></a><br>
+                 <div class="span6">
+                    <h2>Get a Random Yoga Routine</h2>
+                    <h4> Select a Style </h4>
+                    <select  id = "drop" class="span4">
+                        <option value="hatha">Hatha</option>
+                        <option value="vinyasa">Vinyasa</option>
+                        <option value="ashtanga">Ashtanga</option>
+                        <option value="restorative">Restorative</option>
+                    </select> <br>
+                    <h4> Select a Time Length </h4>
+                    <select id = "drop" class="span4">
+                        <option value="45">45 Min</option>
+                        <option value="60">1 Hour</option>
+                        <option value="75">1 Hour 15 Min</option>
+                    </select> 
+                    <h4> Select a Difficulty Level </h4>
+                    <select id = "drop" class="span4">
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select> <br><br>
+
+        <a href="/display_routine" ><button style="font-family: shadows-into-light" class = "btn btn-large">Generate</button></a><br>
     </div>
     <div class="span6">
         {% if routines %}
-        <h3><strong> Use a Saved Yoga Routine </strong></h3>
+        <h2><strong> Use a Saved Yoga Routine </strong></h2>
         {% for routine in routines %}
-            <a href = "/display_saved_routine?routine={{ routine.id }}">{{ routine.name }}
-            <br>
+            <h4><a style="color: #000000" href = "/display_saved_routine?routine={{ routine.id }}">{{ routine.name }}</h4>
             <input type="hidden" name="routine_id" value="{{ routine }}"/>
         {% endfor %} 
+        {% else %}
+        <h2><strong> Use a Saved Yoga Routine </strong></h2>
+        <h4> No Routines Saved </h4>
         {% endif %}  
         </div>
         </div>

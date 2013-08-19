@@ -16,6 +16,11 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/login_info")
+def login_info():
+    return render_template("login_info.html")
+
+
 @app.route("/login")
 def login():
     email = request.args.get("email")
@@ -25,7 +30,7 @@ def login():
         session["user_id"]=user.id
         return redirect(url_for("user_home"))
     else:
-        message = "This is embarassing... It appears we don't have that login on file."
+        message = "Login not on file. Please try again or sign up."
         return render_template("index.html", message=message)
 
 
@@ -38,8 +43,6 @@ def user_home():
         return render_template("user_home.html", message=message, routines=routines)
     else:
         return render_template("user_home.html", message=message)
-
-
 
 
 @app.route("/add_user")
