@@ -6,6 +6,7 @@ import os
 import json
 import re
 
+
 app = Flask(__name__)
 
 
@@ -25,15 +26,20 @@ def login():
         return redirect(url_for("user_home"))
     else:
         message = "This is embarassing... It appears we don't have that login on file."
-        return render_template("home.html", message=message)
+        return render_template("index.html", message=message)
 
 
 @app.route("/user_home", methods=["GET"])
 def user_home():
     user = MyYogi.get_user(id=session["user_id"])
-    message = "Welcome %s" % user.first_name
+    message = "Welcome %s" % user.username
     routines = user.routines
-    return render_template("user_home.html", message=message, routines=routines)
+    if routines:
+        return render_template("user_home.html", message=message, routines=routines)
+    else:
+        return render_template("user_home.html", message=message)
+
+
 
 
 @app.route("/add_user")
@@ -45,9 +51,15 @@ def add_user():
 def new_user():
     email = request.args.get("email")
     password = request.args.get("password")
-    first_name = request.args.get("first_name")
-    user = MyYogi.add_user(email, password, first_name)
-    return redirect(url_for("user_home"))
+    username = request.args.get("username")
+    user = MyYogi.get_user(email=email, password=password)
+    if user:
+        message = "We already have that email on file. Please try again."
+        return render_template("add_user.html", message=message)
+    else:
+        user = MyYogi.add_user(email, password, username)
+        session["user_id"]=user.id
+        return redirect(url_for("user_home"))
 
 
 ######### Yoga Info ##########

@@ -43,12 +43,8 @@ def get_user(**kwargs):
     else:
         return None  
 
-   
-         
-
-
-def add_user(email, password, first_name): 
-    user = model.User(email=email, password=password, first_name=first_name)
+def add_user(email, password, username): 
+    user = model.User(email=email, password=password, username=username)
     model.session.add(user)
     model.session.commit()
     return user
@@ -179,9 +175,9 @@ def generate_routine(training_data, time, sub_routine):
 def get_yoga_routine(training_data, user_id):
     routine = []
 
-    warm_up = generate_routine(training_data.customize(user_id), 1, "warm_up")
+    warm_up = generate_routine(training_data.customize(user_id), 2, "warm_up")
 
-    warrior = generate_routine(training_data.customize(user_id), 1, "warrior")
+    warrior = generate_routine(training_data.customize(user_id), 2, "warrior")
 
 
     routine.append(warm_up)

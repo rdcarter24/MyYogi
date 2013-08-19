@@ -8,12 +8,29 @@
       .submit{
         display : none;
       }
+      #asana_display_container .row{
+        position :relative;
+        text-align: center;
+        float: none;
+        margin: 0 auto;
+        height:300px;
+      }
+      #save_feedback img {
+        height:250px;
+        position:absolute;
+        bottom:0;
+        left:50%;
+      }
 
   </style>
 </head>
 <body>
+    <div id='asana_display_container' class = "container">
     <center>
-        <div id = "save_feedback"></div>
+        <div class = "row available span12">
+
+        <div class = "sizes" id = "save_feedback"></div>
+        </div>
         <div class = "submit">
             <form action="/add_routine">
                 <input type="hidden" name="asana_list" value="{{ asana_list }}"/>
@@ -33,16 +50,21 @@
             </form>
         </div>
     </center>
+    </div>
     <script type="text/javascript">
         var asana_list = {{ asana_list | safe }};
         var asana_time = {{ asana_time | safe }};
         var t = 0;
         var x = 0;
-
+        var image_width;
         for (var i = 0; i < asana_list.length; i++){
             setTimeout(function(){
+
                 $('#save_feedback').fadeOut(1000,function(){
                     $('#save_feedback').html('<img src="'+asana_list[x]+'"/>').hide(); 
+                    image_width=$('#save_feedback img').width()/2;
+                    var image_text = "-" + image_width + "px";
+                    $('#save_feedback img').css('margin-left', image_text);
                     $('#save_feedback').fadeIn(1000);   
 
                     x++
@@ -51,13 +73,8 @@
                         $('#save_feedback').fadeOut(1000,function(){
                             $('.submit').show();
                         });
-
-                    
                     }       
                 });
-
-               
-                
             },t);
 
             t=t+(asana_time[i]*4000)

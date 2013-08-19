@@ -1,11 +1,17 @@
 <html>
+<head>
+    <style>
+        #image{
+            
+        }
+    </style>
 <body>
     <center>            
         <form action="/train_routine" method="POST">
             <input type="hidden" name="asana_list" value="{{ asana_list | join(",")}}"/> 
             <input type="hidden" name="sub_routine_list" value="{{ sub_routine_list }}"/>
             {% for asana in asana_list %}
-                {{asana}} 
+                <div id="image"><img src = "{{asana}}" </div>
                 <input type="checkbox" name="{{asana}}" value="{{1}}" />
                 <br>
             {% endfor %}

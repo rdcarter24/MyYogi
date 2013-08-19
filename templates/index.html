@@ -1,25 +1,58 @@
 <html>
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <script src="//use.edgefonts.net/indie-flower.js"></script>
+    <style>
+        #title{
+            font-family :indie-flower, sans-serif;
+            font-size : 100Px;        }
+        }
+        .foo{
+            font-family :indie-flower, sans-serif;
+        }
+    </style>
+</head>
 <body>
     <center>
-        <p>
-        <form action = "/login">
-            <div id = "login"><h3><strong> Login Below </strong></h3></div>
-            <label for ="email"> Enter Email </label>
-            <input type = "text" name = "email" placeholder = "Email" required/>
+        <br><br>
+        <h1 id="title"><strong>MyYogi</strong></h1><br><br><br><br>
+        <img src="static/img/another_zen.jpg"/>
 
-            <label for ="password"> Enter Password </label>
-            <input type = "password" name = "password" placeholder = "Password" required/>
-            <input type = "submit" value = "Log In"/>
-        </form>
-        </p>
 
-        <p>
-        <form action = "/add_user">
-            <div id = "add_user"><h3><strong> Sign Up  </strong></h3></div>
-            <input type = "submit" value = "Sign Up"/>
-        </form>
-        </p>
-        <p id = "error"> {{message}} </p>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span4">
+            </div>    
+            <div class="span2">
+                <form action = "/login"><br><br>
+                    <div class="input-prepend"><br><br>
+                        <span class="add-on"><i class="icon-envelope"></i></span>
+                        <input class="span7" type="text" name="email" placeholder="Email Address">
+                    </div>
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-key"></i></span>
+                        <input class="span7" type="password" name="password" placeholder="Password" required/>
+                    </div>
+                    <input type = "submit" class = "btn" value = "Log In"/>
+                </form>
+                <p id = "error"> {{message}} </p>
+            </div>
+            <div class="span2">
+                <form action = "/add_user"><br><br>
+                    <input type = "submit" class = "btn" id="foo" value = "Sign Up"/>
+                </form>
+            </div>
+            <div class="span4">
+            </div> 
+      </div>
+</div>
+        
         
         
 
