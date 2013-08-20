@@ -3,7 +3,6 @@ import training_data
 import random
 #import sciplot
 import model
-from sqlalchemy import and_
 
 
 
@@ -11,8 +10,8 @@ from sqlalchemy import and_
 ###### Asanas
 
 ####### BUG!!! get random asana based on routine
-def get_random_asana(sub_routine):
-    rand_asana = model.session.query(model.Asana).filter_by(sub_routine = sub_routine).all()
+def get_random_asana(sub_routine, position):
+    rand_asana = model.session.query(model.Asana).filter_by(sub_routine = sub_routine).filter_by(position=position).all()
     print len(rand_asana)
     rand =  random.randrange(0,len(rand_asana))
     return rand_asana[rand]
@@ -148,7 +147,9 @@ def generate_routine(training_data, time, sub_routine):
             chosen_option = rando_choice(option_list)
 
             if coin_toss(.1) == True: # gets a random asana on occasion
-                asana = get_random_asana(sub_routine)
+                asana = get_random_asana(sub_routine, trigram_chain[-1][0].position)
+                print trigram_chain[-1][0].name
+                print asana.name
                 breaths += asana.breaths
                 trigram_chain.append((asana, asana.breaths))
                 chosen_option = asana.id
@@ -175,9 +176,9 @@ def generate_routine(training_data, time, sub_routine):
 def get_yoga_routine(training_data, user_id):
     routine = []
 
-    warm_up = generate_routine(training_data.customize(user_id), 2, "warm_up")
+    warm_up = generate_routine(training_data.customize(user_id), 1, "warm_up")
 
-    warrior = generate_routine(training_data.customize(user_id), 2, "warrior")
+    #warrior = generate_routine(training_data.customize(user_id), 1, "warrior")
 
 
     routine.append(warm_up)

@@ -28,7 +28,7 @@ class Asana(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(64), nullable=False)
     image = Column(String(64), nullable=True)
-    side = Column(String(1), nullable=True)
+    position = Column(String(1), nullable=True)
     sub_routine = Column(String(64), nullable=True)
     breaths = Column(Integer, nullable=True)
     variance = Column(Integer, nullable=True)
