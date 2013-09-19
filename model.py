@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship, backref
 
 
 # Use connection function below when initializing database.
-# Comment 9 though 12 out when using connection function
+# Comment 11 though 15 out when using connection function
 ENGINE = None
 Session = None
 ENGINE = create_engine("sqlite:///yoga.db", echo=False)
@@ -39,7 +39,7 @@ class Flow(Base):
 
     id = Column(Integer, primary_key=True)
     asana_id = Column(Integer, ForeignKey('asanas.id'))
-    flow_id = Column(Integer, nullable=False) 
+    flow_id = Column(Integer, nullable=False)
     order =Column(Integer, nullable=False)
     breaths = Column(Integer, nullable=True)
 
@@ -50,16 +50,16 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     username = Column(String(64), nullable= False)
-    email = Column(String(64), nullable=False) 
-    password = Column(Integer, nullable=False) 
+    email = Column(String(64), nullable=False)
+    password = Column(Integer, nullable=False)
 
 class Routine(Base):
     __tablename__ = "routines"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(64), nullable= True)
-    user_id = Column(Integer, ForeignKey('users.id')) 
-    breaths = Column(Integer, nullable=True)  
+    user_id = Column(Integer, ForeignKey('users.id'))
+    breaths = Column(Integer, nullable=True)
 
     user = relationship("User", backref=backref("routines", order_by=id))
 
@@ -69,11 +69,11 @@ class Routine_Asana(Base):
 
     id = Column(Integer, primary_key=True)
     asana_id = Column(Integer, ForeignKey('asanas.id'))
-    routine_id = Column(Integer, ForeignKey('routines.id')) 
+    routine_id = Column(Integer, ForeignKey('routines.id'))
     order = Column(Integer, nullable=False)
     breaths = Column(Integer, nullable=True)
     sub_routine = Column(String(64), nullable=True)
-    
+
     routine = relationship("Routine",backref=backref("routine_asanas", order_by=id))
     asana = relationship("Asana",backref=backref("routine_asanas", order_by=id))
 
@@ -82,10 +82,10 @@ class Feedback_Asana(Base):
 
     id = Column(Integer, primary_key=True)
     asana_id = Column(Integer, ForeignKey('asanas.id'))
-    routine_id = Column(Integer, ForeignKey('routines.id')) 
+    routine_id = Column(Integer, ForeignKey('routines.id'))
     sub_routine = Column(String(64), nullable=True)
     rating = Column(Integer, nullable=False)
-    
+
     routine = relationship("Routine",backref=backref("feedback_asanas", order_by=id))
     asana = relationship("Asana",backref=backref("feedback_asanas", order_by=id))
 
