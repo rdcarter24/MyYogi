@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
+import os
 
 
 # Use connection function below when initializing database.
