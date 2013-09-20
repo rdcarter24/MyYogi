@@ -98,7 +98,7 @@ def display_routine():
             sub_routine_json=json.dumps(sub_routine_list)
 
         return render_template("display_routine.html", asana_list=asana_json, asana_time=asana_time, sub_routine_list=sub_routine_json, saved=True)
-    ##### if user wants new routine 
+    ##### if user wants new routine
     ##### generate_routine returns a list of objects of the Asana class
     else:
         routine = MyYogi.get_yoga_routine(training_data, session["user_id"])
@@ -117,7 +117,7 @@ def display_routine():
 @app.route("/add_routine")
 def add_routine():
     save_routine = request.args.get("asana_list")
-    sub_routine_list = request.args.get("sub_routine_list")    
+    sub_routine_list = request.args.get("sub_routine_list")
     return render_template("add_routine.html", asana_list=save_routine, sub_routine_list=sub_routine_list)
 
 
@@ -153,7 +153,7 @@ def rate_routine():
 def train_routine():
     rated_routine = request.form.get("asana")
     asana_string = request.form.get("asana_list")
-    sub_routine_list = json.loads(request.form.get("sub_routine_list"))    
+    sub_routine_list = json.loads(request.form.get("sub_routine_list"))
     asana_list = asana_string.split(',')
     routine = MyYogi.save_routine("train", "0")
 
@@ -164,7 +164,7 @@ def train_routine():
             asana = MyYogi.train_routine_asana(asana.id, routine.id, sub_routine_list[i], "1")
             no_dupl.append(asana_list[i])
             print no_dupl
-        ############# maybe don't need this part    
+        ############# maybe don't need this part
         else:
             asana = MyYogi.get_asana(image=asana_list[i])
             asana = MyYogi.train_routine_asana(asana.id, routine.id, sub_routine_list[i], "0")
@@ -175,6 +175,6 @@ def train_routine():
 #app.secret_key = os.urandom(24)
 app.secret_key = "jdfkafjdksah"
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
-    app.run(debug=True)
+    #app.run(debug=True)
