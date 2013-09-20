@@ -11,7 +11,12 @@ from sqlalchemy.orm import relationship, backref
 # Comment 11 though 15 out when using connection function
 ENGINE = None
 Session = None
-ENGINE = create_engine("sqlite:///yoga.db", echo=False)
+
+if os.environ.get('DATABASE_URL'):
+    ENGINE = create_engine(os.environ.get('DATABASE_URL'), echo=False)
+else:
+    ENGINE = create_engine("sqlite:///yoga.db", echo=False)
+
 session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 
 Base = declarative_base()
