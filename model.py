@@ -13,8 +13,8 @@ import os
 ENGINE = None
 Session = None
 
-if os.environ.get('DATABASE_URL'):
-    ENGINE = create_engine(os.environ.get('DATABASE_URL'), echo=False)
+if os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
+    ENGINE = create_engine(os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'), echo=False)
 else:
     ENGINE = create_engine("sqlite:///yoga.db", echo=False)
 
