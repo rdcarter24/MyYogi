@@ -8,7 +8,7 @@ import re
 
 
 app = Flask(__name__)
-
+app.config['DEBUG'] = True
 
 ############ User log in/sign up info ###########
 @app.route("/")
@@ -175,6 +175,7 @@ def train_routine():
 #app.secret_key = os.urandom(24)
 app.secret_key = "jdfkafjdksah"
 
-#if __name__ == "__main__":
 
-    #app.run(debug=True)
+if __name__ == "__main__":
+    if not os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
+        app.run(debug=True)
