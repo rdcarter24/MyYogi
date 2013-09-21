@@ -22,7 +22,7 @@ parsvottan,21,,,,2
 Warrior2,22,1,/static/img/warrior2.jpg,warrior,4
 Reverse_Warrior,23,1,/static/img/reverse_warrior.jpg,warrior,4
 side_angle,24,1,/static/img/side_angle.jpg,warrior,4
-Inverted_side_angle,25,,,,
+Inverted_side_angle,25,,,,0
 Utthita_Pars,26,1,/static/img/utthita.jpg,warrior,4
 parivrtta_Pars,27,,,,2
 prasaritaA,28,,,,4
