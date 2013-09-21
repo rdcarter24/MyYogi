@@ -57,7 +57,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(64), nullable= False)
     email = Column(String(64), nullable=False)
-    password = Column(Integer, nullable=False)
+    password = Column(String(64), nullable=False)
 
 class Routine(Base):
     __tablename__ = "routines"
