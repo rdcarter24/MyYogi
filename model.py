@@ -9,7 +9,7 @@ import os
 
 
 # Use connection function below when initializing database.
-# Comment 11 though 15 out when using connection function
+# Comment 13 though 21 out when using connection function
 ENGINE = None
 Session = None
 
@@ -22,7 +22,7 @@ session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=F
 
 Base = declarative_base()
 
-#comment 16 through 17 out when using connect function below
+#comment 26 through 27 out when using connect function below
 Base.query = session.query_property()
 Base.metadata.create_all(ENGINE)
 

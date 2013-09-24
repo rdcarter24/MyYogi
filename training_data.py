@@ -29,9 +29,9 @@ for routine in routines:
         if obj.rating == "1" and obj.sub_routine == "warm_up":
             warm_up_train.append(obj.asana_id)
 
-        elif obj.rating == "1" and obj.sub_routine == "warrior":            
+        elif obj.rating == "1" and obj.sub_routine == "warrior":
             warrior_train.append(obj.asana_id)
-   
+
     GOOD_WARM_UP.append(warm_up_train)
     GOOD_WARRIOR.append(warrior_train)
 
@@ -41,8 +41,9 @@ def customize(user_id):
     global GOOD_WARM_UP
     global GOOD_WARRIOR
 
-    user = model.session.query(model.User).filter_by(id=user_id).one()
 
+    user = model.session.query(model.User).filter_by(id=user_id).one()
+    print user
     for routine in user.routines:
         warm_up_train = []
         warrior_train =[]
@@ -50,13 +51,13 @@ def customize(user_id):
             if obj.sub_routine == "warm_up":
                 warm_up_train.append(obj.asana_id)
 
-            elif obj.sub_routine == "warrior":            
+            elif obj.sub_routine == "warrior":
                 warrior_train.append(obj.asana_id)
- 
+
         GOOD_WARM_UP.append(warm_up_train)
         GOOD_WARRIOR.append(warrior_train)
 
-    return GOOD_WARM_UP    
-    return GOOD_WARRIOR
-     
+    return GOOD_WARM_UP
+
+
 

@@ -19,7 +19,7 @@ def get_random_asana(sub_routine, position):
 def get_asana(**kwargs):
     for key in kwargs:
         asana = model.session.query(model.Asana).filter(getattr(model.Asana,key) == kwargs[key]).first()
-    return asana   
+    return asana
 
 def add_asana(name, routine):  # make number of arguments flexible (*kwargs)
     asana = model.Asana(name=name, routine=routine)
@@ -31,7 +31,7 @@ def add_asana(name, routine):  # make number of arguments flexible (*kwargs)
 def get_flow(**kwargs):
     for key in kwargs:
         flow = model.session.query(model.Flow).filter(getattr(model.Flow,key) == kwargs[key]).all()
-    return flow   
+    return flow
 
 ######## Users
 def get_user(**kwargs):
@@ -40,9 +40,9 @@ def get_user(**kwargs):
     if user:
         return user
     else:
-        return None  
+        return None
 
-def add_user(email, password, username): 
+def add_user(email, password, username):
     user = model.User(email=email, password=password, username=username)
     model.session.add(user)
     model.session.commit()
@@ -87,7 +87,7 @@ def time_variance(obj):
     if rand > .5:
         time = obj.breaths + num
     else:
-        time = obj.breaths - num 
+        time = obj.breaths - num
 
 
 def coin_toss(input):
@@ -100,7 +100,7 @@ def coin_toss(input):
 
 def generate_routine(training_data, time, sub_routine):
     trigram_dict = {}
-    trigram_chain = [] 
+    trigram_chain = []
 
     # convert given time in min to number of breaths
     time_in_sec = time * 60
@@ -114,13 +114,14 @@ def generate_routine(training_data, time, sub_routine):
             asana1 = training_data[i][j]
             asana2 = training_data[i][j+1]
             asana3 = training_data[i][j+2]
-            
+
             key = (asana1, asana2)
             trigram_dict.setdefault(key,[]).append(asana3)
 
     ########### Build list of tuples (obj, obj.time)
     start_key = (training_data[0][0], training_data[0][1])
     first_asana = get_asana(id=start_key[0])
+    print first_asana.name
     breaths += first_asana.breaths
     sec_asana = get_asana(id=start_key[1])
     breaths += sec_asana.breaths
@@ -133,7 +134,7 @@ def generate_routine(training_data, time, sub_routine):
     if chosen_option >= 100:
         flow = get_flow(flow_id=chosen_option)
         for chosen_option in flow:
-            breaths += chosen_option.breaths 
+            breaths += chosen_option.breaths
             trigram_chain.append((chosen_option.asana, chosen_option.breaths))
         new_key = (flow[-2].asana.id, flow[-1][0].asana.id)
     else:
@@ -148,15 +149,14 @@ def generate_routine(training_data, time, sub_routine):
 
             if coin_toss(.1) == True: # gets a random asana on occasion
                 asana = get_random_asana(sub_routine, trigram_chain[-1][0].position)
-                print trigram_chain[-1][0].name
-                print asana.name
+
                 breaths += asana.breaths
                 trigram_chain.append((asana, asana.breaths))
                 chosen_option = asana.id
             elif chosen_option >= 100:
                 flow = get_flow(flow_id=chosen_option)
                 for asana in flow:
-                    breaths += asana.breaths 
+                    breaths += asana.breaths
                     trigram_chain.append((asana.asana, asana.breaths))
             else:
                 asana = get_asana(id=chosen_option)
@@ -166,7 +166,7 @@ def generate_routine(training_data, time, sub_routine):
         else:
             # BUG!!!   its pooping out if new_key is not in trigram_dict
             break
-    
+
     return (trigram_chain, sub_routine)
 
 
@@ -186,14 +186,14 @@ def get_yoga_routine(training_data, user_id):
 
     return routine
 
-#get_yoga_routine(training_data)
+
 '''
     sun_salutation = query #flow database for sun salutaion
     #warrior series needs to repeat on both sides
 
     one_side = generate_routine(training_data.good_warrior, 7)
 
-    vinyasa = query #flow database for vinyasa or other flow sequence 
+    vinyasa = query #flow database for vinyasa or other flow sequence
 
     other_side = one_side # work out how to do mirror
 
@@ -224,7 +224,7 @@ def get_yoga_routine(training_data, user_id):
 # # takes in a training data set and returns a markov dictionary
 #     def read_training_data(self, training_data):
 #         trigram_dict = {}
-     
+
 
 #         for i in range(len(training_data)-2):
 #             move1 = training_data[i]
@@ -234,7 +234,7 @@ def get_yoga_routine(training_data, user_id):
 #             key = (move1,move2)
 
 #             trigram_dict.setdefault(key,[]).append(move3)
-        
+
 #         return trigram_dict
 
 
@@ -279,7 +279,7 @@ class Quadgram(object):
 # takes in a training data set and returns a markov dictionary
     def read_training_data(self, training_data):
         quadgram_dict = {}
-     
+
 
         for i in range(len(training_data)-3):
             move1 = training_data[i]
@@ -335,9 +335,9 @@ quad_predict = quadgram.make_prediction(quadgram.read_training_data(training_dat
 def compare_methods(training_data):
     error_dict = {}
     error_list = []
-    
+
     ## write test for this
-    for i in np.arange(0, 1, 0.1): 
+    for i in np.arange(0, 1, 0.1):
         error = 0
         for j in range(len(training_data)):
 
@@ -351,9 +351,9 @@ def compare_methods(training_data):
                     error += 1
         error_dict[(round(i, 1), round(1-i, 1))] = error
         error_list.append((round(i, 1), round(1-i, 1)))
-    
 
- 
+
+
     # find weights with the lowest error
     return min(error_dict.items(), key=lambda x: x[1])[0]
 
