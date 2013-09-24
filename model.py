@@ -10,21 +10,21 @@ import os
 
 # Use connection function below when initializing database.
 # Comment 13 though 21 out when using connection function
-ENGINE = None
-Session = None
+# ENGINE = None
+# Session = None
 
-if os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
-    ENGINE = create_engine(os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'), echo=False)
-else:
-    ENGINE = create_engine("sqlite:///yoga.db", echo=False)
+# if os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
+#     ENGINE = create_engine(os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'), echo=False)
+# else:
+#     ENGINE = create_engine("sqlite:///yoga.db", echo=False)
 
-session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
+# session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 
 Base = declarative_base()
 
 #comment 26 through 27 out when using connect function below
-Base.query = session.query_property()
-Base.metadata.create_all(ENGINE)
+# Base.query = session.query_property()
+# Base.metadata.create_all(ENGINE)
 
 
 #Class declaration
@@ -96,14 +96,14 @@ class Feedback_Asana(Base):
     asana = relationship("Asana",backref=backref("feedback_asanas", order_by=id))
 
 #use connect function when initializing database
-# def connect():
-#     global ENGINE
-#     global Session
+def connect():
+    global ENGINE
+    global Session
 
-#     if os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
-#         ENGINE = create_engine(os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'), echo=False)
-#     else:
-#         ENGINE = create_engine("sqlite:///yoga.db", echo=False)
-#     Session = sessionmaker(bind=ENGINE)
+    if os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
+        ENGINE = create_engine(os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'), echo=False)
+    else:
+        ENGINE = create_engine("sqlite:///yoga.db", echo=False)
+    Session = sessionmaker(bind=ENGINE)
 
-#     return Session()
+    return Session()
