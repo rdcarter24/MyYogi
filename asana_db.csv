@@ -1,4 +1,4 @@
-start_mountain,1,,/static/img/start_mountain.jpg,,4
+start_mountain,1,1,/static/img/start_mountain.jpg,warm_up,4
 mountain,2,1,/static/img/mountain.jpg,warm_up,1
 arms_up,3,1,/static/img/arms_up.jpg,warm_up,1
 forward_fold,4,1,/static/img/forward_fold.jpg,warm_up,1
