@@ -5,33 +5,34 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
+from sqlalchemy.schema import Sequence
 import os
 
 
 # Use connection function below when initializing database.
 # Comment 13 though 21 out when using connection function
-# ENGINE = None
-# Session = None
+ENGINE = None
+Session = None
 
-# if os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
-#     ENGINE = create_engine(os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'), echo=False)
-# else:
-#     ENGINE = create_engine("sqlite:///yoga.db", echo=False)
+if os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'):
+    ENGINE = create_engine(os.environ.get('HEROKU_POSTGRESQL_VIOLET_URL'), echo=False)
+else:
+    ENGINE = create_engine("sqlite:///yoga.db", echo=False)
 
-# session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
+session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 
 Base = declarative_base()
 
 #comment 26 through 27 out when using connect function below
-# Base.query = session.query_property()
-# Base.metadata.create_all(ENGINE)
+Base.query = session.query_property()
+Base.metadata.create_all(ENGINE)
 
 
 #Class declaration
 class Asana(Base):
     __tablename__ = "asanas"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Sequence('asanas_id_seq', start=1, increment=1), primary_key=True)
     name = Column(String(64), nullable=False)
     image = Column(String(64), nullable=True)
     position = Column(String(1), nullable=True)
