@@ -43,7 +43,6 @@ def customize(user_id):
 
 
     user = model.session.query(model.User).filter_by(id=user_id).one()
-    print user
     for routine in user.routines:
         warm_up_train = []
         warrior_train =[]
