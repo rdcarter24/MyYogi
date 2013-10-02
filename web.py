@@ -156,7 +156,7 @@ def train_routine():
     asana_string = request.form.get("asana_list")
     sub_routine_list = json.loads(request.form.get("sub_routine_list"))
     asana_list = asana_string.split(',')
-    routine = MyYogi.save_routine("train", "0")
+    routine = MyYogi.save_routine("train", "1")
 
     no_dupl =[]
     for i in range(len(asana_list)):
