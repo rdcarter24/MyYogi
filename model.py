@@ -55,7 +55,7 @@ class Flow(Base):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, Sequence('users_id_seq', start=0, increment=1), primary_key=True)
+    id = Column(Integer, Sequence('users_id_seq', start=1, increment=1), primary_key=True)
     username = Column(String(64), nullable= False)
     email = Column(String(64), nullable=False)
     password = Column(String(64), nullable=False)

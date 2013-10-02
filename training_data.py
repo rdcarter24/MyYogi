@@ -18,7 +18,7 @@ GOOD_FLOOR_STRETCH = []
 
 
 ###### training feedback
-routines = model.session.query(model.Routine).filter_by(user_id=0).all()
+routines = model.session.query(model.Routine).filter_by(user_id=1).all()
 
 for routine in routines:
     warm_up_train = []
