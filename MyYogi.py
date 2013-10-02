@@ -120,7 +120,6 @@ def generate_routine(training_data, time, sub_routine):
 
     ########### Build list of tuples (obj, obj.time)
     start_key = (training_data[0][0], training_data[0][1])
-    print training_data[0][0]
     first_asana = get_asana(id=start_key[0])
     breaths += first_asana.breaths
     sec_asana = get_asana(id=start_key[1])

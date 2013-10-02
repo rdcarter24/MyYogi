@@ -87,6 +87,7 @@ def display_routine():
 
     ##### if user wants saved routine
     ##### get_routine returns a list of objects of the Routine_Asana class
+    ##### BUG!!!!  redirect home after running saved routine
     if routine_id:
         routine = MyYogi.get_routine(routine_id)
 
