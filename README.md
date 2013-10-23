@@ -1,0 +1,3 @@
+MyYogi
+======
+A full stack web application that uses back propagation to generate a semi-random yoga routine. The app has two means for feedback.  The first allows the user to generate training data by selecting sequences that were good.  The second automatically uses the routines users have saved as training data only when they are signed in, which allows for customization. A function produces random moves every once in while to keep the algorithm from converging.  Tools used include; Python, Flask, PostgreSQL, SQLAlchemy, JavaScript, HTML, CSS, and Bootstrap.  A short demo can be seen here; mighty-sierra-4614.herokuapp.com.
